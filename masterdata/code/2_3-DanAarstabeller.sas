@@ -1,5 +1,5 @@
 %macro danaarstab(tab,var,primtab=,startyr=2018,in=master,dropview=TRUE,postfix=,where=);
-%startlog(&logdir,2_3-DanAarstabeller&tab&postfix);
+%start_log(&logdir,2_3-DanAarstabeller&tab&postfix);
 %start_timer(masterdata);
 
 %local i j var dsn1 dsn2 dsn3 ds_names;
@@ -31,7 +31,7 @@ proc sql noprint;
         where year(datepart(&var)) %IF &yr=&startyr %THEN between 1960 and &yr; %else = &yr;;
     %END;
     drop table work.&dsn2;
-    %IF &dropview=TRUE %THEN drop view &id..&dsn2;;
+    %IF &dropview=TRUE %THEN drop view &in..&dsn2;;
   %END;
   %IF &tab ne &primtab and &primtab ne %THEN %DO;
     proc sql noprint;

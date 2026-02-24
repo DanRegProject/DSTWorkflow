@@ -67,7 +67,7 @@
             output _tempdata1_ ;
                 run;
                 proc sql;
-                 %IF %sysfunc(exist(&in..&dsn,VIEW)) %THEN drop view &out..&dsn;;
+                 %IF %sysfunc(exist(&out..&dsn,VIEW)) %THEN drop view &out..&dsn;;
                     create table &out..&dsn as
                         select a.*, b.diagtype as diagtype_parent
                         from _tempdata1_ a left join _tempdata_ b
@@ -109,7 +109,7 @@
                 %if %varexist(&in..&dsn,OMINUT) %then ominut;;
                 run;
                 proc sql;
-                %IF  %sysfunc(exist(&in..&dsn,VIEW)) %THEN drop view &out..&dsn;;
+                %IF  %sysfunc(exist(&out..&dsn,VIEW)) %THEN drop view &out..&dsn;;
                 quit;
                 proc sort data=_tempdata_ out=&out..&dsn noduplicates;
                     by kontakt_id;

@@ -20,8 +20,8 @@ options mprint merror spool dlcreatedir;
 /* Angiv projektnummer, tjek! */
 %let Globalproject = 7xxxxx;
 /* Kontroller sti, tjek!      */
-%let Globalprojectpath    = e:/workdata/&globalproject;
-%let GlobalprojectpathRaw = e:/rawdata/&globalproject;
+%let Globalprojectpath    = e:/projektdb/OPEN/workdata/&globalproject;
+%let GlobalprojectpathRaw = e:/projektdb/OPEN/rawdata/&globalproject;
 
 /* Angiv hvor data skal placeres */
 %let projectname            = masterdata; /* library in folder &globalprojectpath */
@@ -60,6 +60,7 @@ libname mcolib "&projectpath/data/SAS/MCOLIB"; /* overwrite readonly in common.s
 /* Angiv datasættet med studiepopulationen               */
 /* bruges i 1-kopierDataFraRaw.sas til at lave pnr nøgle */
 %let studiepop = rawdata.studiepopulation;
+%let studiepop = popdata.population_709645;
 
 /* I de inkluderede filer er makroer som ikke bør skulle ændres    */
 /* med i makrokaldene nederst skal datasæt- og evt variabelnavne,  */

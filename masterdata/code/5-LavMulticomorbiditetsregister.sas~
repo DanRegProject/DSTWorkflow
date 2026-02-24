@@ -93,11 +93,11 @@
                     merge work.&score.&I._red(in=a) work.base&score.&I._red(in=b);
                     by pnr id;
                     if b and not a and rec_out>&projectdate then rec_out=&projectdate-1;
-                    if a and not b then do; rec_out=rec_out1; rec_in=rec_in1; end;
+                    if a and not b then to; rec_out=rec_out1; rec_in=rec_in1; end;
                     drop rec_in1 rec_out1 id;
                 %runquit;
 
-                proc sort data=work.&score.&I._red;
+                proc sort data=work.&score.&I.red;
                     by pnr outcome indate  rec_in rec_out;
                 %runquit;
           %end;

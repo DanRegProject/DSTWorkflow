@@ -5,6 +5,7 @@
 	%let tempfile = %SYSFUNC(pathname(work))/mydef_tmp.sas;
 	data _null_;
 		infile "&file" lrecl=32767;
+		file "&tempfile";
 		length line $32767;
 		retain inserted 0;
 		input;
@@ -61,7 +62,7 @@
 	                        run;
 	                        quit;
                         %end;
-						%IF %UPCASE(&mode)=DATA %THEN %DO;
+						%IF %UPCASE(&mode)=VIEW %THEN %DO;
 							%insertline(&defpath,rename &var = %scan(&new,&j));
 	                    %END;
                   /*  %else %put WARNING: Variablen %scan(&old,&j) findes ikke i datasættet &in..&dsn;

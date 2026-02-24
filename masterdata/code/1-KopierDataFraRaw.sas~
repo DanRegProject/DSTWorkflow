@@ -54,8 +54,7 @@
                     where libname="&in" and upper(memname)="&ds";
                 select distinct(name) into :var1-:var%trim(%left(&num_vars))
                     from dictionary.columns
-                    where libname="&in" and upper(memname)="&ds"
-		    order by name;
+                    where libname="&in" and upper(memname)="&ds";
                 %sqlquit;
         %IF %varexist(&in..&ds,&pnrvar) %THEN %DO;
             proc sql;
@@ -73,7 +72,7 @@
         %let defpath = %sysfunc(pathname(&out))/&ds._def.sas;
         data _null_;
         file "&defpath";
-        put "  data &out..&ds";
+        put "  data &out..&d";
         %IF %UPCASE(&mode)=VIEW %THEN put "/ view=&out..&ds";;
         put ";";
         put "&lenstr.;";

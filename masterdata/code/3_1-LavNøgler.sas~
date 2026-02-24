@@ -48,10 +48,9 @@
         %if "&head"="PSYK_ADM" %then %let postfix=psyk;
         data &out..key&postfix.&ident;
             set _tempfile_;
-            where not missing(&ident);
+            where &ident is not missing;
             ny&ident=_N_;
         run;
-	%cleanup(_tempfile_);
         %put NOTE: Nøgle for &ident er dannet i datasættet &out..key&postfix.&ident;
         %end;
     %mend;
