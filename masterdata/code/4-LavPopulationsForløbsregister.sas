@@ -25,8 +25,9 @@ data pop;
     proc sql noprint;
     select distinct memname into :ds_names separated by ' '
         from dictionary.tables
-        where libname=upcase("&in") and prxmatch("/^&head.([^A-Za-z]|$)/", memname) > 0 and 
-        (upcase(memtype)="DATA" or upcase(memtype)="VIEW");
+        where libname=upcase("&in") and prxmatch("/^BEF.([^A-Za-z]|$)/", memname) > 0 and 
+        (upcase(memtype)="DATA" or upcase(memtype)="VIEW")
+	order by memname;
 	%let i=1;
 	
 	%do %while (%scan(&ds_names,&i) ne );
