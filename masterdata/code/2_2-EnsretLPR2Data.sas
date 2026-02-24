@@ -37,7 +37,7 @@
                     %if %varexist(&in..&dsn,udminut) %then  udminut;;
                 run;
                proc sql noprint;
-               %IF SYSFUNC(exist(&out..&dsn,VIEW)) %THEN drop view &out..&dsn;;
+               %IF %SYSFUNC(exist(&out..&dsn,VIEW)) %THEN drop view &out..&dsn;;
                quit;
                 proc sort data=_tempdata_ out=&out..&dsn noduplicates;
                     by pnr kontakt_id;
@@ -63,7 +63,7 @@
             drop _void_
                 %if %varexist(&in..&dsn,tildiag) %then  tildiag;
             ;
-  	    if diagtype ne "+" or diagtype ne "H" then output _tempdata_;
+  	    if diagtype ne "+" and diagtype ne "H" then output _tempdata_;
             output _tempdata1_ ;
                 run;
                 proc sql;

@@ -1,7 +1,7 @@
 /* Herfra er det datamanagement */
 /* Start del 2.1 */
 %MACRO insertline(file,line);
-	%let line = %UPCASE((&line);
+	%let line = %UPCASE(&line);
 	%let tempfile = %SYSFUNC(pathname(work))/mydef_tmp.sas;
 	data _null_;
 		infile "&file" lrecl=32767;
@@ -62,7 +62,7 @@
 	                        quit;
                         %end;
 						%IF %UPCASE(&mode)=DATA %THEN %DO;
-							%insertline(&defpath,rename &var = scan(&new,&j));
+							%insertline(&defpath,rename &var = %scan(&new,&j));
 	                    %END;
                   /*  %else %put WARNING: Variablen %scan(&old,&j) findes ikke i datasættet &in..&dsn;
                     %end;*/

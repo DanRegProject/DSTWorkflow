@@ -11,7 +11,7 @@
 
 data work.allhosp;
 	set work.allhosp;
-		electflag=(priority="2" or substr(priority,1.4)="ATA3");
+		electflag=(priority="2" or substr(priority,1,4)="ATA3");
 		overnight=(indate ne outdate);
 		year=year(indate);
 	keep hospital hospitalunit year electflag overnight;

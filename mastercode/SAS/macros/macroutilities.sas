@@ -1,8 +1,4 @@
 /* SVN header
-$Date: 2019-11-05 13:59:52 +0100 (ti, 05 nov 2019) $
-$Revision: 208 $
-$Author: wnm6683 $
-$Id: macroUtilities.sas 208 2019-11-05 12:59:52Z wnm6683 $
 */
 /* start and stop calculation of execution time */
 %macro start_timer(name);
@@ -13,6 +9,7 @@ $Id: macroUtilities.sas 208 2019-11-05 12:59:52Z wnm6683 $
 	  %put start &name %sysfunc(today(),date.) %sysfunc(time(),time.);
   %end;
 %mend;
+
 %macro end_timer(name, text=); /* optional text when writing result in log */
   %if &create_timelog=TRUE %then %do;
     data _null_; /* calculate time */
@@ -23,17 +20,20 @@ $Id: macroUtilities.sas 208 2019-11-05 12:59:52Z wnm6683 $
   %end;
 %mend;
 /* start and stop log */
+
 %macro start_log(path, name, option=new); /* replace option=new with option= if log is to be appended to old */
   %if &create_log=TRUE %then %do;
     proc printto log="&path/&name..log" print="&path/&name..log" &option;    run;
   %end;
 %mend;
+
 %macro end_log;
   %if &create_log=TRUE %then %do;
     proc printto;
     run;
   %end;
 %mend;
+
 %macro quotelst(str, quote=%str(%"),delim=%str( ));
     /*
     / Author : Roland Rashleigh-Berry
@@ -49,6 +49,7 @@ $Id: macroUtilities.sas 208 2019-11-05 12:59:52Z wnm6683 $
         %end;
     %unquote(&quotelst)
 %mend; /* quotelst */
+
 %macro commas(str);
     /*
     / Author : Roland Rashleigh-Berry
@@ -57,6 +58,7 @@ $Id: macroUtilities.sas 208 2019-11-05 12:59:52Z wnm6683 $
     */
     %quotelst(&str,quote=%str(),delim=%str(, ))
 %mend; /* commas */
+
 %macro NewDatasetName(proposalname);
     %local i newdatasetname;
     %let proposalname=%sysfunc(compress(&proposalname));
@@ -67,12 +69,14 @@ $Id: macroUtilities.sas 208 2019-11-05 12:59:52Z wnm6683 $
         %end;
     &newdatasetname
     %mend;
+
 %macro cleanup(sets,lib=work);
     proc datasets nolist lib=&lib;
         delete &sets;
     run;
     quit;
     %mend;
+
 ** %isBlank();
 ** ref: chanchung.com/download/022-2009.pdf paper022-2009 SAS Global Forum;
 **      Is this macro blank? ;
@@ -85,6 +89,7 @@ $Id: macroUtilities.sas 208 2019-11-05 12:59:52Z wnm6683 $
 ** ref: analytics.ncsu.edu/sesug/2010/CC07.Blanchette.pdf;
 /** Usage %RunQuit; anvendes istedet for RUN; eller QUIT; stopper efterfølgende kørsel af SAS steps;
 */
+
 %macro RunQuit;
   ;
   run;
@@ -93,6 +98,7 @@ $Id: macroUtilities.sas 208 2019-11-05 12:59:52Z wnm6683 $
     %abort cancel;
   %end;
 %mend ;
+
 %macro varexist
 /*----------------------------------------------------------------------
 Check for the existence of a specified variable.
@@ -156,6 +162,7 @@ other variable information and CLOSE functions.
 %else 0;
 
 %mend varexist;
+
 /*
 In datastep utility to calculate days since startdate for a bunch of endpoints
 */
@@ -173,11 +180,13 @@ In datastep utility to calculate days since startdate for a bunch of endpoints
     %abort cancel;
   %end;
 %mend;
+
 %MACRO _doindex(data,idx,idxlist);
   proc sql;
     create index &idx on &data (%commas(&idxlist));
   quit;
 %MEND;
+
 %MACRO doIndex(data,idx,idxlist,st="",sl="");
 %LOCAL I;
   %IF &st="" %THEN %DO;
@@ -189,6 +198,7 @@ In datastep utility to calculate days since startdate for a bunch of endpoints
     %END;
   %END;
 %MEND;
+
 %MACRO doIndexlist(data,idx,st="",sl="");
     %LOCAL I x nidx;
   %LET nidx=%sysfunc(countw(&idx));
@@ -207,6 +217,7 @@ In datastep utility to calculate days since startdate for a bunch of endpoints
     %END;
   %end;
 %MEND;
+
 %macro clear_all_old_indexes(st, sl, lib, name);
 %local I;
   %do I=&st %to &sl;
@@ -233,3 +244,111 @@ In datastep utility to calculate days since startdate for a bunch of endpoints
   %let &liste = %lowcase(&orderedvars);
 %mend;
 
+
+/* check and remove reoccurring events in the list */
+%macro nonrep(mvar=, outvar=);
+%global numvar;
+%local I J long;
+%let numvar =  %sysfunc(countw(&&&mvar));
+%put Number of Variables = &numvar;
+%global &outvar;
+%do i=1 %to &numvar;
+  %let j=%eval(&i-1);
+  %if %symexist(%scan(&&&mvar, &i))=0 %then
+  %do;
+    %let %scan(&&&mvar,&i)=1;
+    %local name&i;
+    %let name&i=%scan(&&&mvar,&i);
+    %put Number &i : &&name&i;
+    %if &i=1 %then %let long = &name1;
+    %else %let long = &long &&name&i;
+  %end;
+%end;
+%let &outvar=&long;
+%mend;
+
+/* header macro, used for logging where, when and why */
+%macro header(path=, ajour=, dataset=, initials=, reason=);
+  %put ;
+  %put *********************************** HEADER **************************************;
+  %put Dataset           : &dataset;
+  %put Ajour             : &ajour; 
+  %put Path              : &path;
+  %put Today             : %qsysfunc(datetime(), datetime20.3);
+  %put Updated by        : &initials;
+  %put Reason for update : &reason;
+  %put *********************************************************************************;
+%mend;
+
+%macro describeSASchoises(comment, 
+                          path=&locallogdir /* default out folder */,
+                          name=SAScomments  /* default filename */ , 
+                          newfile = FALSE   /* select reset option or append to existing file */
+                          );
+  %let mod=;
+  %if %upcase(&NewFile)=FALSE %then %let mod=mod;
+    data _null_;
+      file "&path\&name..txt" &mod; 
+  	  put &comment;
+     	  put;
+    run;
+%mend;
+
+%macro diag_txt(prefix, dir, list, output, ICD8=FALSE);
+  %local I nof listname;
+
+  %nonrep(mvar=list, outvar=newlist);
+  %let nof = %sysfunc(countw(&newlist));
+
+  data _null_;
+    file "&dir\&output..txt";
+
+  %do I=1 %to &nof;
+    %let listname = %lowcase(%scan(&newlist,&I));
+	put "| &listname | "  &&&prefix.L&listname   " | %upcase(&&&prefix.&listname) | " %if &ICD8=TRUE and %symexist(&prefix.&listname._ICD8)=1 %then "&&&prefix.&listname._ICD8 | ";;
+  %end;
+
+  %runquit;
+%mend;
+
+%macro mco_txt(score,dir, output);
+  %local U I W;
+
+ data _null_;
+    file "&dir\&output..txt";
+    put "Definition for score &score";
+    %if %symexist(LINK&score) %then %do;
+        put " Link function : &&LINK&score";
+    %end;
+
+    %if %symexist(LPR&score.N) %then %do;
+        put / "| weight | text | ICD-10 | ICD-8 |";
+        %do I = 1 %to &&LPR&score.N;
+            put "| &&LPR&score.&I.W  |  " &&LPRL&score.&I " |  &&LPR&score.&I  | &&LPR&score.&I._ICD8  | ";
+        %end;
+    %end;
+    %if %symexist(CPR&score.N) %then %do;
+  put / "| weight | text | Criteria |";
+    %do I = 1 %to &&CPR&score.N;
+      put "| &&CPR&score.&I.W |  " &&CPRL&score.&I " |  &&CPR&score.&I.C  |  ";
+    %end;
+  %end;
+    %if %symexist(OTH&score.N) %then %do;
+  put / "| weight | text | Criteria |";
+    %do I = 1 %to &&OTH&score.N;
+      put "| &&OTH&score.&I.W |  " &&OTHL&score.&I " |  &&OTH&score.&I.C  |  ";
+    %end;
+  %end;
+
+  run;
+%mend;
+
+
+%macro create_datalist(prefix, dir, list, output, ICD8=FALSE);
+  %if %index(&mcolist,%upcase(&prefix))>0 %then %do;
+    %mco_txt(&prefix, &dir, &output);
+  %end;
+  %else %do;
+    %diag_txt(&prefix, &dir, &list, &output, ICD8=&ICD8);
+  %end;
+%mend;

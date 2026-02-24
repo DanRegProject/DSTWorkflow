@@ -88,8 +88,15 @@ options fmtsearch=(fmt.times_personstatistik fmt.times_erhvervsstatistik fmt.tim
 
 options compress=YES;
 options mprint merror spool;
+*options mprint merror symbolgen mlogic;
+*options mprint merror nosymbolgen nomlogic;
 
 %let sqlmax = max;
+
+/* use subsetLPR and subsetLMDB macros, only create tables if the macro has not been executed already */
+%let DiagInWork  = FALSE; /* create a copy of the files in work, for faster execution when making risk tables */
+%let MediInWork  = FALSE;
+%global DiagInWork MediInWork;
 
 
 /* here follows the inclusion of all published macros */
@@ -97,22 +104,66 @@ options mprint merror spool;
 %include "&localmacropath/macros/mergegeneric.sas";
 %include "&localmacropath/macros/subsetdata.sas";
 
+%include "&localmacropath/macros/subsetLMDB.sas";
+%include "&localmacropath/macros/subsetLPR.sas";
+%include "&localmacropath/macros/getdiag.sas";
+%include "&localmacropath/macros/getmedi.sas";
+%include "&localmacropath/macros/gethosp.sas";
+%include "&localmacropath/macros/getOPR.sas";
+*%include "&localmacropath/macros/getUBE.sas"; /* obsolete use getOPR instead */
+%include "&localmacropath/macros/getMFR.sas";
+%include "&localmacropath/macros/getSocio.sas";
 %include "&localmacropath/macros/excldiag.sas";
-%include "&localmacropath/macros/RiskSetMatch.sas";
+%include "&localmacropath/macros/baseMedi.sas";
+%include "&localmacropath/macros/baseDiag.sas";
+%include "&localmacropath/macros/baseOPR.sas";
+%include "&localmacropath/macros/reduceMediPeriods.sas";
+%include "&localmacropath/macros/prereducemedistatus.sas";
+%include "&localmacropath/macros/reducemedistatus.sas";
+%include "&localmacropath/macros/reducediag.sas";
+%include "&localmacropath/macros/reduceOPR.sas";
+*%include "&localmacropath/macros/RiskSetMatch.sas";
+%include "&localmacropath/macros/RiskSetMatch2.sas";
+%include "&localmacropath/macros/mergediag.sas";
+%include "&localmacropath/macros/mergemedi.sas";
+%include "&localmacropath/macros/mergeOPR.sas";
+%include "&localmacropath/macros/mergeUBE.sas";
+%include "&localmacropath/macros/MergePOP.sas";
+%include "&localmacropath/macros/mergeSocio.sas";
 %include "&localmacropath/macros/qualdiag.sas";
+%include "&localmacropath/macros/header.sas";
+%include "&localmacropath/macros/list_sas_files_in_dir.sas";
+%include "&localmacropath/macros/create_datalist.sas";
+%include "&localmacropath/macros/nonrep.sas";
 %include "&localmacropath/macros/macroutilities.sas";
+%include "&localmacropath/macros/riskmacros.sas";
+%include "&localmacropath/macros/charlson.sas";
 %include "&localmacropath/macros/multicoscore.sas";
+%include "&localmacropath/macros/describeSASchoises.sas";
 %include "&localmacropath/macros/smoothhosp.sas";
+%include "&localmacropath/macros/genendpoint.sas";
+%include "&localmacropath/macros/icd_atcdefines.sas";
 %include "&localmacropath/macros/checklog.sas";
-%include "&localmacropath/macros/datacheck.sas";
+%include "&localmacropath/macros/TjekMacro.sas";
 
-%include "&localmacropath/icd_atc_codes/LMDBkoder.sas";
-%include "&localmacropath/icd_atc_codes/DIAGkoder.sas";
+%include "&localmacropath/icd_atc_codes/ATCkoder.sas";
+%include "&localmacropath/icd_atc_codes/LPRkoder.sas";
 %include "&localmacropath/icd_atc_codes/OPRkoder.sas";
 %include "&localmacropath/icd_atc_codes/UBEkoder.sas";
+%include "&localmacropath/icd_atc_codes/ATCriskscores.sas";
+%include "&localmacropath/icd_atc_codes/LPRriskscores.sas";
 %include "&localmacropath/icd_atc_codes/Riskscores.sas";
+
+%include "&localmacropath/icd_atc_codes/LPRkoder2020.sas";
 
 %include "&localmacropath/formats/format.sas";
 
 options source2; /*ensures that log from %include is also added to the logfile*/;
 options dlcreatedir; /* create directory if not existing when using libname option */
+/*
+data _null_;
+    infile "e:/workdata/703794/code/SAS/1/welcome.txt";
+    input;
+    put _infile_;
+run;
+*/

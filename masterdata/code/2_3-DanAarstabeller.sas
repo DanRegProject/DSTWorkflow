@@ -8,7 +8,7 @@
 %LET primtab=%UPCASE(&primtab);
 
 %IF %UPCASE(&test)=TRUE %THEN %LET in=WORK;
-
+%let endyr=%sysfunc(date(),year4.);
 %LET ds_names=;
 proc sql noprint;
   select distinct memname into :dsn2 separated by ' '
@@ -20,7 +20,8 @@ proc sql noprint;
     proc sql noprint inobs=&sqlmax;
     create table work.&dsn2 as 
       select * from &in..&dsn2;
-    %DO yr=&startyr %to %sysfunc(date(),yer4.);
+      quit;
+    %DO yr=&startyr %to &endyr;
       proc sql noprint inobs=&sqlmax;
       create table &in..&dsn2._&yr as
         select * 
@@ -39,13 +40,14 @@ proc sql noprint;
       where libname=upcase("&in") and prxmatch("/^&primtab.([^A-Za-z]|$)/",memname)>0 and upcase(memtype)=upcase("DATA");
       create table work.&dsn2 as 
         select * from &in..&dsn2;
-        %DO yr=&startyr %to %sysfunc(date(),yer4.);
+	quit;
+        %DO yr=&startyr %to &endyr;
           %let dsn1=%sysfunc(tranwrd(&dsn2,&tab,&primtab));
           %let dsn3=substr(&dsn2,1,%length(&dsn2)-%length(&postfix))&postfix;
           proc sql noprint inobs=&sqlmax;
           create table &in..&dsn3._&yr as
             select * 
-            from work.&dsn2
+            from work.&dsn2 as a
             where a.&var in (select &var from &in..&dsn1._&yr)
             %if &where ne %then and &where;
             ;

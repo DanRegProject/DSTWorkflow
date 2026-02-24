@@ -30,10 +30,11 @@ data pop;
 	%let i=1;
 	
 	%do %while (%scan(&ds_names,&i) ne );
+		%let dsn=%scan(&ds_names,&i);	
    		%if %sysfunc(exist(&in..&dsn)) or %sysfunc(exist(&in..&dsn,VIEW)) %then %do;
 			proc sql;
 			create table _pop as
-				select a.*, b.koen as koen&y, b.foed_dag as foed_dag&y, &y as yr&y
+				select a.*, b.koen as koen&i, b.foed_dag as foed_dag&i, &i as yr&i
 			from pop a left join &in..&dsn b
 			on a.pnr=b.pnr
 			order by pnr;
