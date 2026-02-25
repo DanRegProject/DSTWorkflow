@@ -33,14 +33,9 @@ data pop;
 	%do %while (%scan(&ds_names,&i) ne );
 		%let dsn=%scan(&ds_names,&i);	
    		%if %sysfunc(exist(&in..&dsn)) or %sysfunc(exist(&in..&dsn,VIEW)) %then %do;
-
-			%let pos=%index(&dsn,"20");
-			%if &pos=0 %then %let pos=%index(&dsn,"19");
-			%let yr=%substr(&dsn,&pos,4);
-			
 			proc sql;
 			create table _pop as
-				select a.*, b.koen as koen&yr, b.foed_dag as foed_dag&yr, &yr as yr&yr
+				select a.*, b.koen as koen&i, b.foed_dag as foed_dag&i, &i as yr&i
 			from pop a left join &in..&dsn b
 			on a.pnr=b.pnr
 			order by pnr;
