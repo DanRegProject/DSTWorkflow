@@ -8,6 +8,7 @@
 %macro makepopreg(pop,dode,vandringer,in=master,out=master,head=bef);
 %if %upcase(&test)=TRUE %then %let in=WORK;
 %if %upcase(&test)=TRUE %then %let out=WORK;
+%let head=%upcase(&head);
 proc sort data=&in..&vandringer out=vandringer nodupkey;
 	by pnr haend_dato indud_kode;
 %runquit;
@@ -25,7 +26,7 @@ data pop;
     proc sql noprint;
     select distinct memname into :ds_names separated by ' '
         from dictionary.tables
-        where libname=upcase("&in") and prxmatch("/^BEF.([^A-Za-z]|$)/", memname) > 0 and 
+        where libname=upcase("&in") and prxmatch("/^&head.([^A-Za-z]|$)/", memname) > 0 and 
         (upcase(memtype)="DATA" or upcase(memtype)="VIEW")
 	order by memname;
 	%let i=1;
