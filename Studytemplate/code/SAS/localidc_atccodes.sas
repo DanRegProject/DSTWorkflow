@@ -2,13 +2,17 @@
 
 */
 /*
- Use this file for diagnose (LPR), operation (OPR), procedure (UBE), prescription (ATC), laboratory data (LAB) that are not available in the general codelists;
+ Use this file for diagnose (DIAG), 
+ operation (OPR), 
+ procedure (UBE), 
+ prescription (LMDB), 
+ hospital prescription (HHMDB), 
+ laboratory data (LAB) ;
  Eventually consider these codes to be included in the general list;
 
  See macros/SAS/ICD_ATC_codes for how to write the code groups, or use the macro in icd_atcdefines.sas
- %macro ICD_ATCdefines(type, name, short_txt, code, icd8="");
  */
 /* example
-%ICD_ATCdefines(LPR, slemdiag, "det gør ondt, av av", D666, icd8=666);
+%IndicatorDef(DIAG, slemdiag, "det gÃ¸r ondt, av av", DA666, icd8=666,crit=,verbose=FALSE);
 */
 
