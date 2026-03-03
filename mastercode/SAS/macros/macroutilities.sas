@@ -345,7 +345,7 @@ In datastep utility to calculate days since startdate for a bunch of endpoints
 
 
 %macro create_datalist(prefix, dir, list, output, ICD8=FALSE);
-  %if %index(&mcolist,%upcase(&prefix))>0 %then %do;
+  %if %indexw(&mcolist,%upcase(&prefix))>0 %then %do;
     %mco_txt(&prefix, &dir, &output);
   %end;
   %else %do;
