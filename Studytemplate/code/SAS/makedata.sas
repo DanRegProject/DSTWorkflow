@@ -1,95 +1,118 @@
-/*
-
-*/
 %start_log(&locallogdir, makedata);
 %start_timer(makedata);
 
-%header(path=&projectpath, ajour=&ProjectDate, dataset=&ProjectName, initials=&ProjectOwnerInitials, reason=Running makedata.sas making final studypt-table);
+/* dette er en skabelon udfyldt til et typisk kohorte studie, forvent nogen justering til
+   det aktuelle studie */
 
 data studie;
-  merge &basedata; /* single population or a combination - tables are sorted by pnr and idate */
-  by pnr idate;
-  where &ProjectDate between rec_in and rec_out;
-  drop rec_in rec_out;
+    set
+        %if %sysfunc(exist(mydata.basepop1)) %then mydata.basepop1;
+        %if %sysfunc(exist(mydata.basepop2)) %then mydata.basepop2;
+        %if %sysfunc(exist(mydata.basepop3)) %then mydata.basepop3;
+        %if %sysfunc(exist(mydata.basepop4)) %then mydata.basepop4;
+        %if %sysfunc(exist(mydata.basepop5)) %then mydata.basepop5;
+        %if %sysfunc(exist(mydata.basepop6)) %then mydata.basepop6;;
+
+    by pnr idate;
 %runquit;
 
 /* reduce to first pnr */
 data studie;
-  set studie;
-  by pnr idate;
-  idate=oprdate;
-  if first.pnr;
+    set studie;
+    by pnr idate;
+    idate=opdate;
+    if first.pnr;
+    format idate date.;
 %runquit;
 
-%describeSASchoises("Merge the hospital periods for the base treatment to the dataset"); /* set newfile in order to create a new empty file */
+%describeSASchoices("Merge the hospital periods for the base treatment to the dataset", newfile=TRUE, name=makedataSAScomments);
 
+/* create new empty file */
 %macro mergedata;
-%smoothhosp(mydata.hospitalSmooth, mydata.hospall, ajour=&ProjectDate, nofDays=1);
+    %smoothhosp(mydata.hospitalsmooth, mydata.hospall, ajour=&projectdate, nofdays=1);
 
-%if "&diaglist" ne "" %then %mergeDiag(studie, mydata, mydata, idate, &diaglist, postfix=B, ajour=&ProjectDate);;
+    %if "&diaglist" ne "" %then
+    %merge(basedata=studie, inlib=mydata, outlib=mydata,
+        indexdate=idate, datevar=start, sets=&diaglist, type=DIAG,
+        invar =start slut prioritet diagtype,
+        outvar=in   out prio
+        postfix=B, subset=(diagtype in ("A", "B")));;
 
-/* example with subset */
-%if "&diaglist" ne "" %then %mergeDiag(studie, mydata, mydata, idate, &diaglist, postfix=B, ajour=&ProjectDate, subset=(pattype eq "1"));;
+    %if "&oprlist" ne "" %then
+    %merge(basedata=studie, inlib=mydata, outlib=mydata,
+        indexdate=idate, datevar=start_pro, sets=&diaglist, type=OPR,
+        invar =start_pro ,
+        outvar=in     ,
+        postfix=, subset=);;
 
+    %if "&ubelist" ne "" %then
+    %merge(basedata=studie, inlib=mydata, outlib=mydata,
+        indexdate=idate, datevar=start_pro, sets=&diaglist, type=UBE,
+        invar =start_pro ,
+        outvar=in     ,
+        postfix=, subset=);;
 
-%describeSASchoises("example: Looking at history for &diaglist and followup for &diaglist1");;
-%if "&diagALL" ne "" %then %mergeDiag(studie, mydata, mydata, idate, &diagALL, hosp=mydata.hospitalSmooth, ajour=&ProjectDate);; /* basic data about population including hospitalization */
-%if "&mediALL" ne "" %then %mergeMedi(studie, mydata, mydata, idate, &mediALL,  ajour=&ProjectDate);;
-%if "&oprALL.&ubeALL" ne "" %then %mergeOpr(studie,  mydata, mydata, idate, &oprALL &ubeALL, ajour=&ProjectDate);;
+    %if "&medilist" ne "" %then
 
-%if "&diagtilALL" ne "" %then %mergeDiag(studie, mydata, mydata, idate, &diagtilALL, tildiag = TRUE, hosp=mydata.hospitalSmooth, ajour=&ProjectDate);; /* basic data about population including hospitalization */
-%if "&oprtilALL.&ubetilALL" ne "" %then %mergeOpr(studie,  mydata, mydata, idate, &optilALL &ubetilALL, tilopr = TRUE, ajour=&ProjectDate);;
-%if "&mediLAB" ne "" %then %mergeLAB(studie, mydata, mydata, idate, &labALL,  ajour=&ProjectDate);;
-%mergePop(mydata.popAll, studie, studie, idate, ajour=&ProjectDate);
+    %if "&medilist" ne "" %then
+    %merge(basedata=studie, inlib=mydata, outlib=mydata,
+    indexdate=idate, datevar=start, sets=&diaglist, type=LMDB,
+    invar =eksd npack packsize strnum volume,
+    outvar=eksd npack psize str vol,
+    postfix=, subset=);;
+
+    %if "&lablist" ne "" %then
+    %merge(basedata=studie, inlib=mydata, outlib=mydata,
+    indexdate=idate, datevar=start, sets=&diaglist, type=LAB,
+    invar =samplingdate results,
+    outvar=date res,
+    postfix=, subset=);;
+
+    /* makroer til at danne behandlingsperioder ud fra receptdata, variabeldosis eksempel */
+    %reduceMediPeriods(mydata.lmdbwarfall,mydata.lmdbwarfper,warf,2,indexdate=idate,tabsperday=,stddosage=2.5,maxdosage=10,mindosage=1,
+                   inclusiondays=, subset=, dosedata=);
+
+    %mergePeriods(studie, mydata.lmdbwarfper,idate,warf);
+
+/* flere behandlinger kan kombineres med %jointrt(), Adherence mål med DaysCovered kan beregnes med %DaysCov() */
+/* findes i adherencemacros.sas */
+
+   %mergePop(studie, studie, idate, ajour=&projectdate);
 %mend;
+
 %mergedata;
 
 /* backup studie */
 data mydata.studie;
-  set studie;
+    set studie;
 %runquit;
 
 %macro riskscores;
 /* get risk scores and merge them onto studie */
-%describeSASchoises("Risk calculation looking 1 year back in time");
-%riskmacros(mydata.studie, idate, mydata.risktable, mydata.indicators, 1*&YearInDays, &locallogdir, &Projectdate);
+%describeSASchoices("risk calculation looking 1 year back in time", name=makedataSAScomments);
 
-%if "&useCharlson" eq "TRUE" %then %multicoscore (charlson, mydata.studie, mydata, idate, PeriodStart=, ajour=today(),mergebase=FALSE);;
-%if "&useSegal" eq "TRUE" %then %multicoscore (segal, mydata.studie, mydata, idate, PeriodStart=, ajour=today(),mergebase=FALSE);
-%if "&useHFRS" eq "TRUE" %then %multicoscore (hfrs, mydata.studie, mydata, idate, PeriodStart=, ajour=today(),mergebase=FALSE);
-
+%if "&usecharlson"  eq "TRUE" %then %multicoscore(charlson,    mydata.studie, mydata, idate, periodstart=, ajour=today(), mergebase=TRUE);;
+%if "&usesegal"     eq "TRUE" %then %multicoscore(segal,       mydata.studie, mydata, idate, periodstart=, ajour=today(), mergebase=TRUE);;
+%if "&usehfrs"      eq "TRUE" %then %multicoscore(hfrs,        mydata.studie, mydata, idate, periodstart=, ajour=today(), mergebase=TRUE);;
+%if "&usehasbled"   eq "TRUE" %then %multicoscore(hasbled,     mydata.studie, mydata, idate, periodstart=, ajour=today(), mergebase=TRUE);;
+%if "&usechadsvasc" eq "TRUE" %then %multicoscore(cha2ds2vasc, mydata.studie, mydata, idate, periodstart=, ajour=today(), mergebase=TRUE);;
 %mend;
+
 %riskscores;
 
 data myfinal.studiept;
-  set mydata.studie ;
-  by pnr;
+    set mydata.studie;
+    by pnr;
 
-  format ageidate 3.; /* no decimalpoints in age */
-  if birthdate ne . then ageidate = intck('year', birthdate, idate);;
-%macro callbase;
-  /* information about basepopulation: */
-  %if "&diagALL" ne "" %then %baseDiag(idate, &diagALL,  keeppat=TRUE, keepDiag=TRUE, keepDate=TRUE, keepStatus=TRUE, keepAfter=TRUE);;
-  /* information according to idate in basepopulation */
-  %if "&oprALL.&ubeALL" ne "" %then %baseOPR(idate,  &oprALL &ubeALL,   keepDate=TRUE, keepBefore=TRUE,  keepAfter=FALSE);
-  %if "&mediALL" ne "" %then %baseMedi(idate, &mediALL, keepDate=TRUE, StatusType=1, StatusCrit=365);
-
-  %if "&diagtilALL" ne "" %then %baseDiag(idate, &diagtilALL,  keeppat=TRUE, keepDiag=TRUE, keepDate=TRUE, keepStatus=TRUE, keepAfter=TRUE);;
-  %if "&oprtilALL.&ubetilALL" ne "" %then %baseOPR(idate,  &oprtilALL &ubetilALL,   keepDate=TRUE, keepBefore=TRUE,  keepAfter=FALSE);
-
-%mend;
-%callbase;
-
-%RunQuit;
-
-/* create a table for STATA */
-proc export data=myfinal.studiept outfile="&localstatadir\studiept.dta" replace;
+    format ageidate 3.; /* no decimalpoints in age */
+    if birthdate ne . then ageidate = intck('year', birthdate, idate);;
 %runquit;
 
+proc export data=myfinal.studiept outfile="&localstatadir\studiept.dta" replace;
+run;
 
 %end_timer(makedata, text=entire makedata file);
 %end_log;
-
 
 *%TjekMacro(mydata.seALL, diagnose, pattype diagtype, titletxt='SE diagnosis');
 *%TjekMacro(mydata.hfatcall, hfatc, strnum, titletxt='HF medication');
