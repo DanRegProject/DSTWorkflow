@@ -74,7 +74,7 @@ Note: Character and numeric variables are handled separately. Array initializati
 
 ## Return / Side-effects
 
-- `%merge` writes reduced intermediate result datasets to `&outlib` named: `&outlib..&type&var&postfix&IndexDate` for each `var` in `sets`. Example: if `type=LPR`, `var=HOSP1`, `postfix=_v1`, `IndexDate=inc_date`, the generated dataset name will be `&outlib..LPRHOSP1_v1inc_date`.
+- `%merge` writes reduced intermediate result datasets to `&outlib` named: `&outlib..&type&var&postfix&IndexDate` for each `var` in `sets`. Example: if `type=DIAG`, `var=HOSP1`, `postfix=_v1`, `IndexDate=inc_date`, the generated dataset name will be `&outlib..DIAGHOSP1_v1inc_date`.
 - `%merge` updates/overwrites the dataset referenced by `basedata` — it sorts & merges the reduced outputs into `&basedata` and replaces it.
 - Temporary intermediate tables (work tables) are removed via `%cleanup`.
 
@@ -82,7 +82,7 @@ Note: Character and numeric variables are handled separately. Array initializati
 
 - "merge ERROR: Required arguments not specified..." — one or more required macro parameters missing.
 - "merge ERROR: Only one type allowed" — `type` parameter contained multiple tokens.
-- "merge ERROR: type (&type) not one of : LPR LMDB OPR UBE PATO LAB CAR" — invalid `type`.
+- "merge ERROR: type (&type) not one of : DIAG LMDB OPR UBE PATO LAB CAR" — invalid `type`.
 - "merge ERROR: number of variables for input and output not equal." — `invar` and `outvar` lists differ in length.
 - "merge WARNING: &inlib..&type&var.ALL data set not available." — specific input dataset missing; the macro skips processing that set.
 
@@ -95,15 +95,15 @@ Note: Character and numeric variables are handled separately. Array initializati
   inlib=raw,
   outlib=work,
   IndexDate=inc_date,
-  type=LPR,
+  type=DIAG,
   datevar=adm_date,
   sets=HOSP1 HOSP2,
-  invar=diag_code proc_code,
+  invar=diag diagtype,
   subset=a.adm_date >= '01JAN2010'd,
   postfix=_v1
 );
 ```
-- For each set token (`HOSP1`, `HOSP2`), the macro looks for `raw.LPRHOSP1.ALL` and `raw.LPRHOSP2.ALL`.
+- For each set token (`HOSP1`, `HOSP2`), the macro looks for `raw.DIAGHOSP1ALL` and `raw.DIAGHOSP2ALL`.
 - It will compute first/last/after-index summaries for `diag_code` and `proc_code` and merge these variables into `work.cohort`.
 
 2) Using custom output variable names:
