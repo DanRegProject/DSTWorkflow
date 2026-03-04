@@ -18,26 +18,25 @@ macros/mergegeneric.sas
 
 ## High-level behavior
 
-1. Validate required parameters and `type` argument (must be one of: `LPR`, `LMDB`, `OPR`, `UBE`, `PATO`, `LAB`, `CAR`).
-2. Optionally deduplicate `sets` via `%nonrep` (if > 2 sets).
-3. For each "set" token in `sets`:
+1. Validate required parameters and `type` argument (must be one of: `DIAG`, `LMDB`, `OPR`, `UBE`, `PATO`, `LAB`, `CAR`).
+2. For each "set" token in `sets`:
    - Look for a dataset named `&inlib..&type&var.ALL`
    - Create a temporary table joining the input set to `basedata` by `pnr` (and applying `&subset` if given)
    - Map each `invar` to the corresponding `outvar` (default `outvar = invar` when not supplied)
    - Call `%reduce` to compute first/last/after-index values and save the result to `&outlib..&type&var&postfix&IndexDate`
-4. After processing all sets, sort `&basedata` and merge all generated reduced files into `&basedata` by `pnr` (and `&IndexDate` if specified). Final `&basedata` replaces the original dataset in place.
+3. After processing all sets, sort `&basedata` and merge all generated reduced files into `&basedata` by `pnr` (and `&IndexDate` if specified). Final `&basedata` replaces the original dataset in place.
 5. Temporary tables are cleaned up with `%cleanup`.
 
 Note: The macros assume `pnr` is the person identifier present both in the input sets and in `basedata`.
 
 ## Key parameters
-
+```sas
 %merge(
   basedata=,   /* REQUIRED: Base cohort dataset (libname.dataset or dataset in current lib). Must contain pnr (and IndexDate if used) */
   inlib=work,  /* Library where input raw datasets live (default: work) */
   outlib=work, /* Library to write intermediate reduced outputs (default: work) */
   IndexDate=,  /* Optional: date variable in basedata used to compute before/after summaries */
-  type=,       /* REQUIRED: one code identifying the classification of input datasets. Allowed values: LPR LMDB OPR UBE PATO LAB CAR */
+  type=,       /* REQUIRED: one code identifying the classification of input datasets. Allowed values: DIAG LMDB OPR UBE PATO LAB CAR */
   datevar=,    /* REQUIRED: date variable in the input datasets (the event date to use for ordering) */
   sets=,       /* REQUIRED: space-separated list of set name tokens. For each token `var`, macro looks for dataset &inlib..&type&var.ALL */
   invar=,      /* REQUIRED: space-separated list of variables to extract from input datasets */
@@ -45,16 +44,7 @@ Note: The macros assume `pnr` is the person identifier present both in the input
   subset=,     /* OPTIONAL: expression applied to the join (e.g. a.date >= '01jan2010'd). Added as an `AND` clause when joining to &basedata. Use macro-safe quoting where needed. */
   postfix=     /* OPTIONAL: postfix to append to intermediate reduced dataset names */
 );
-
-%reduce(
-  indata=,     /* Input detailed dataset (temporary table built by %merge) */
-  outdata=,    /* Output reduced dataset (created by reduce) */
-  type=,       /* Passed through from caller (used only in labels/text) */
-  outcome=,    /* Outcome name used as prefix for generated variable names */
-  IndexDate=,  /* Optional index date; when empty reduce follows a simpler logic without index-date grouping */
-  varlist=,    /* Space-separated list of variables to reduce (variables present in indata) */
-  datevar=     /* Date variable used for ordering in the input table (same as the `datevar` passed to %merge) */
-);
+```
 
 ## Variable naming convention produced by %reduce
 
