@@ -46,7 +46,7 @@
 %LET OPRstdgetvar = pnr start start_proc proc proctype kontakt_id;
 %LET LMDBstdgetvar = pnr eksd atc;
 %LET LABstdgetvar =;
-%LET PATOstdgetvar =pnr dato_rekvirering diagnose_snomed_kode diagnose_snomed_sekvensnummer instans_undersogende materialenummer anden_specialprocedure hasteprocedure materiale_antal materialetype specielle_analyser;
+%LET PATOstdgetvar =pnr dw_ek_rekvisition dato_rekvirering diagnose_snomed_kode diagnose_snomed_sekvensnummer instans_undersogende materialenummer anden_specialprocedure hasteprocedure materiale_antal materialetype specielle_analyser;
 %LET CARstdgetvar =;
 
  /* Default code variable used for row selection in %get() */
