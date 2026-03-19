@@ -54,7 +54,7 @@
           %if &type=&source %then %let ftype=prim; %else %let ftype=&type;
           %put >Search for &type.&code in &stype.&ftype: &&&stype.&ftype <;
           %if %symexist(&stype.&ftype) %then %do;
-           %findrows(outdata=&type.&code.ALL&s, outcome=&code, code=&&type&code, indata=&indata,
+           %findrows(outdata=&type.&code.ALL&s, outcome=&code, code=&&&type&code, indata=&indata,
           fromyear=&fromyear, type=&type, SOURCE=&stype, returncode=RC,
           fromdate=&fromdate, todate=&todate,
           getvar=&getvar, subset=&subset); /*See above*/
@@ -149,9 +149,9 @@ proc sort data=&outlib..&type.&code.ALL;
 
 %let DSN1=%UPCASE(&&&SOURCE.prim);
 %let dsn2=;
-%if %symexist(&&&SOURCE.&type)=1 %then %let DSN2=%UPCASE(&&&SOURCE.&type);
+%if %symexist(&&SOURCE.&type)=1 %then %let DSN2=%UPCASE(&&&SOURCE.&type);
 %let dsn3=;
-%if %symexist(&&&SOURCE.&type.2)=1 %then %let DSN3=%UPCASE(&&&SOURCE.&type.2);
+%if %symexist(&&SOURCE.&type.2)=1 %then %let DSN3=%UPCASE(&&&SOURCE.&type.2);
 %if "&SOURCE"="LPR3" %then %do;
    %let tablegrp = %UPCASE(&LPR3grp._);
 %end;
@@ -214,16 +214,16 @@ proc sql noprint;
             where a.name=b.name;
          %end;
 
-         select distinct(name) into :locgetvar1 separated by ', ' from dictionary.columns
+         select distinct upcase(name) into :locgetvar1 separated by ', ' from dictionary.columns
             where upcase(libname)="MASTER" and memname="&locdsn1"
             %IF &getvar ne %THEN and upcase(name) in (%quotelist(&getvar, delim=%str(, )));
 %if &dsn2 ne %then
-   select distinct(name) into :locgetvar2 separated by ', ' from dictionary.columns
+   select distinct upcase(name) into :locgetvar2 separated by ', ' from dictionary.columns
       where upcase(libname)="MASTER" and memname="&locdsn2"
       %IF &getvar ne %THEN and upcase(name) in (%quotelist(&getvar, delim=%str(, )));
 
 %if &dsn3 ne %then
-   select distinct(name) into :locgetvar3 separated by ', ' from dictionary.columns
+   select distinct upcase(name) into :locgetvar3 separated by ', ' from dictionary.columns
       where upcase(libname)="MASTER" and memname="&locdsn3"
       %IF &getvar ne %THEN and upcase(name) in (%quotelist(&getvar, delim=%str(, )));
 
@@ -267,9 +267,9 @@ proc sql inobs=&sqlmax;
       %if &dlstcnt > 0 %then %do;
          (
             %do v=1 %to &dlstcnt;
-            %let dval = %upcase(%scan(&code,&v));
+            %let dval = %upcase(%qscan(&code,&v));
             %if &v>1 %then OR ;
-               upcase(&&&type.stdgetcodevar) like "&dval%nstr(%%)"
+               upcase(&&&type.stdgetcodevar) like "&dval%nrstr(%%)"
          %end;
       )
    %end;
