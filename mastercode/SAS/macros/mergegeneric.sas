@@ -36,7 +36,7 @@
              %else %DO;
             proc sql;
 	    create table &outdat as
-                select a.*, a.&datevar,
+                select a.pnr, a.&datevar,
 				%DO v=1 %TO &nvar;
 				%IF &datevar ne %SYSFUNC(compress(%QSCAN(&outvar,&v))) %THEN a.%SYSFUNC(compress(%QSCAN(&invar,&v))) as %SYSFUNC(compress(%QSCAN(&outvar,&v))),;
 				%END;
@@ -90,8 +90,8 @@
 	%LET nnvar=0;
 	%IF &varcar ne %THEN %LET ncvar=%sysfunc(countw(&varcar));
 	%IF &varnar ne %THEN %LET nnvar=%sysfunc(countw(&varnar));
-    %LET nncvar=&nrep*&ncvar;
-    %LET nnnvar=&nrep*&nnvar;
+    %LET nncvar=%eval(&nrep*&ncvar);
+    %LET nnnvar=%eval(&nrep*&nnvar);
     data &outdata ;
       %IF &ncvar>0 %THEN %DO;
 		  array varc{&ncvar,&nrep}  $
