@@ -84,7 +84,7 @@ data _null_;  /* lav et length statement med største værdi */
    by name;
    length len_stmt $300;
    retain len_stmt 'length';
-   if first.name;
+   if first.name then
       len_stmt = catx(' ',len_stmt, strip(name), '$', strip(maxlength));
    if eof then call symput('lenstr', trim(len_stmt));
 run;
