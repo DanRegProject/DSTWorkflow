@@ -35,8 +35,8 @@ data pop;
 		%let dsn=%scan(&ds_names,&i);	
    		%if %sysfunc(exist(&in..&dsn)) or %sysfunc(exist(&in..&dsn,VIEW)) %then %do;
 
-			%let pos=%index(&dsn,"20");
-			%if &pos=0 %then %let pos=%index(&dsn,"19");
+			%let pos=%index(&dsn,20);
+			%if &pos=0 %then %let pos=%index(&dsn,19);
 			%let yr=%substr(&dsn,&pos,4);
 			
 			proc sql;
