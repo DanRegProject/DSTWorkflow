@@ -92,7 +92,7 @@ run;
 data &outlib..&type.&code.ALL;
    &lenstr.;
    set &filelist;
-   _in=0 ; &inline;
+   _in=0  &inline;
    source=lowcase(scan("&SOURCE",_in));
    drop _in;
 %runquit;
