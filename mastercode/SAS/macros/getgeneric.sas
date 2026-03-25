@@ -92,7 +92,7 @@ run;
 data &outlib..&type.&code.ALL;
    &lenstr.;
    set &filelist;
-   _in=0  &inline;
+   _in=0  &inline; /* this line expands to a numeric expression, giving the number of the source, see line 65 */
    source=lowcase(scan("&SOURCE",_in));
    drop _in;
 %runquit;
@@ -229,8 +229,8 @@ proc sql noprint;
 
 quit;
 
-%let rename=%sysfunc(tranwrd(&rename,"_","_"));
-%let rename2=%sysfunc(tranwrd(&rename2,"_","_"));
+%let rename=%sysfunc(tranwrd(&rename," _","_"));
+%let rename2=%sysfunc(tranwrd(&rename2," _","_"));
 
 proc sql noprint inobs=&sqlmax;
    create table work.&locdsn1 as select &locgetvar1 from master.&locdsn1;
