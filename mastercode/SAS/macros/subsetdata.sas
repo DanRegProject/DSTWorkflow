@@ -12,8 +12,8 @@
       where libname=upcase("&inlib") and prxmatch("/^&head.([^A-Za-z]|$)/",memname)>0 and 
       (upper(memtype)="DATA" or upper(memtype)="VIEW");
       %let i=1;
-      %do %while (&scan(&ds_names,&i) ne );
-        %let ds=&scan(&ds_names,&i);
+      %do %while (%scan(&ds_names,&i) ne );
+        %let ds=%scan(&ds_names,&i);
         %if %varexist(&inlib..&ds,&key) %then %do;
           proc sql inobs=&sqlmax;
           create table _tempfile_ as 
@@ -24,7 +24,7 @@
               %if &primtab ne %then (
                 select p.&key from &inlib..&primtab.&i p, &pop q
                 where p.pnr=q.pnr ) ;
-            ) b, where a.&key=b.&key;
+            ) b where a.&key=b.&key;
             quit;
           %if &append ne TRUE %THEN %DO;
             data &outlib..&ds;
