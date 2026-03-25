@@ -95,6 +95,7 @@ options mprint merror spool;
 /* here follows the inclusion of all published macros */
 %include "&localmacropath/macros/getgeneric.sas";
 %include "&localmacropath/macros/mergegeneric.sas";
+%include "&localmacropath/macros/mergepop.sas";
 %include "&localmacropath/macros/subsetdata.sas";
 
 %include "&localmacropath/macros/excldiag.sas";
