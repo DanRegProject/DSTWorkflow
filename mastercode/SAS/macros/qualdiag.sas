@@ -37,13 +37,13 @@
 		%if &medidays2 ne %then %let medibef = %commas(&medibef);
 		firsteksd&datevar.&label=min(&mediaf);
 		lasteksd&datevar.&label= %if &medidays2 ne %then max(&medibef);%else . ;;
-		%let ifmedi = .<fisteksd&datevar&label-&datevar<=&medidays;
-		%if &medidays2 ne %then %let ifmedi = &ifmedi of .<&datevar-lasteksd&datevar.&label <= &medidays2;
-		%let keepmedi = fisteksd&datevar.&label lasteksd&datevar.&label;
+		%let ifmedi = .<firsteksd&datevar&label-&datevar<=&medidays;
+		%if &medidays2 ne %then %let ifmedi = &ifmedi or .<&datevar-lasteksd&datevar.&label <= &medidays2;
+		%let keepmedi = firsteksd&datevar.&label lasteksd&datevar.&label;
 		format firsteksd&datevar lasteksd&datevar.&label date.;
 		%end;
 	%if &oprube ne %then %do;
-		%let oprubedates2 = 0;
+		%let oprubedays2 = 0;
 		%if %sysfunc(countw(&oprubedays))=2 %then %do;
 			%let oprubedays2 = %scan(&oprubedays,1);
 			%let oprubedays = %scan(&oprubedays,2);
@@ -103,22 +103,22 @@
 %runquit;
 %cleanup(&QDhosp);
 %cleanup(&QDhosp0);
-%describeSASchoises("Hospitalization periods are joind by &datevar history, shuch thta we have both the period where diagnosis is obtained and the previous hospitalization.");
+%describeSASchoises("Hospitalization periods are joined by &datevar history, such that we have both the period where diagnosis is obtained and the previous hospitalization.");
 %end;
 
 proc sort data=&QD;
 	by pnr &datevar;
 	%runquit;
-		data &out;
-		set &QD;
-		by pnr;
+data &out;
+	set &QD;
+	by pnr;
 
-		%if &incident=TRUE %then %do;
+	%if &incident=TRUE %then %do;
 		if first.pnr;
-		%end;
+	%end;
 	%if &label ne %then rename &datevar = &datevar.&label;;
-	%runquit;
-	%cleanup(&QD);
+%runquit;
+%cleanup(&QD);
 %mend;
 
 
