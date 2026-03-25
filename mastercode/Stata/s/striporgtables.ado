@@ -13,7 +13,6 @@ while r(eof)==0{
     local line = subinstr("`line'", ",", "|", .)
     if "`wrap'" == "wrap" local line = "|" + "`line'" + "|"
     *local trimmed = strtrim("`line'")
-    if substr("`line'",1,1)=="|" {
         file write fout "`line'" _n
     }
     file read fin line
