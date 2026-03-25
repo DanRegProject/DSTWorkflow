@@ -44,7 +44,6 @@
                 from &inlib..&type&var.ALL a, &basedata b
                 where a.pnr=b.pnr %IF %ISBLANK(%SUPERQ(subset))=0 %THEN and &subset;
                 order by b.pnr, b.&indexdate, a.&datevar;
-            %runquit;
             %RunQuit;
 
             %reduce(&outdat, &outlib..&type&var&postfix&Indexdate, &type, &var&postfix, &IndexDate, &outvar, &datevar);
@@ -60,12 +59,12 @@
    	     &outlib..&type&var&postfix&Indexdate
           %END;
         ;
-   by pnr &IndexDate;
-   if A;
-   %RunQuit;
-   %cleanup(&outdat);
+   		by pnr &IndexDate;
+   		if A;
+   	%RunQuit;
+   	%cleanup(&outdat);
 %END;
-        %mend;
+%mend;
 
 %MACRO reduce(indata,outdata,type,outcome,IndexDate,varlist,datevar);
   %local i temp var varnar varcar nrep format;
@@ -85,7 +84,7 @@
         %IF %varexist(&temp,&var,type)=C %THEN %LET varcar = &varcar &var;
                                          %else %LET varnar = &varnar &var;
         %END;
-    %IF &indexDate ne %THEN %LET nrep=3; %else nrep=1;
+    %IF &indexDate ne %THEN %LET nrep=3; %else %LET nrep=1;
 	%LET ncvar=0;
 	%LET nnvar=0;
 	%IF &varcar ne %THEN %LET ncvar=%sysfunc(countw(&varcar));
