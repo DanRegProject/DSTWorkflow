@@ -253,7 +253,6 @@ In datastep utility to calculate days since startdate for a bunch of endpoints
 %put Number of Variables = &numvar;
 %global &outvar;
 %do i=1 %to &numvar;
-  %let j=%eval(&i-1);
   %if %symexist(%scan(&&&mvar, &i))=0 %then
   %do;
     %let %scan(&&&mvar,&i)=1;
@@ -288,7 +287,7 @@ In datastep utility to calculate days since startdate for a bunch of endpoints
   %let mod=;
   %if %upcase(&NewFile)=FALSE %then %let mod=mod;
     data _null_;
-      file "&path\&name..txt" &mod; 
+      file "&path/&name..txt" &mod; 
   	  put &comment;
      	  put;
     run;
@@ -301,7 +300,7 @@ In datastep utility to calculate days since startdate for a bunch of endpoints
   %let nof = %sysfunc(countw(&newlist));
 
   data _null_;
-    file "&dir\&output..txt";
+    file "&dir/&output..txt";
 
   %do I=1 %to &nof;
     %let listname = %lowcase(%scan(&newlist,&I));
@@ -315,7 +314,7 @@ In datastep utility to calculate days since startdate for a bunch of endpoints
   %local U I W;
 
  data _null_;
-    file "&dir\&output..txt";
+    file "&dir/&output..txt";
     put "Definition for score &score";
     %if %symexist(LINK&score) %then %do;
         put " Link function : &&LINK&score";
@@ -327,18 +326,24 @@ In datastep utility to calculate days since startdate for a bunch of endpoints
             put "| &&LPR&score.&I.W  |  " &&LPRL&score.&I " |  &&LPR&score.&I  | &&LPR&score.&I._ICD8  | ";
         %end;
     %end;
+	%else %if %symexist(DIAG&score.N) %then %do;
+        put / "| weight | text | ICD-10 | ICD-8 |";
+        %do I = 1 %to &&DIAG&score.N;
+            put "| &&DIAG&score.&I.W  |  " &&DIAGL&score.&I " |  &&DIAG&score.&I  | &&DIAG&score.&I._ICD8  | ";
+        %end;
+    %end;
     %if %symexist(CPR&score.N) %then %do;
-  put / "| weight | text | Criteria |";
-    %do I = 1 %to &&CPR&score.N;
-      put "| &&CPR&score.&I.W |  " &&CPRL&score.&I " |  &&CPR&score.&I.C  |  ";
-    %end;
-  %end;
+  		put / "| weight | text | Criteria |";
+    	%do I = 1 %to &&CPR&score.N;
+      		put "| &&CPR&score.&I.W |  " &&CPRL&score.&I " |  &&CPR&score.&I.C  |  ";
+    	%end;
+  	%end;
     %if %symexist(OTH&score.N) %then %do;
-  put / "| weight | text | Criteria |";
-    %do I = 1 %to &&OTH&score.N;
-      put "| &&OTH&score.&I.W |  " &&OTHL&score.&I " |  &&OTH&score.&I.C  |  ";
-    %end;
-  %end;
+  		put / "| weight | text | Criteria |";
+	    %do I = 1 %to &&OTH&score.N;
+	      put "| &&OTH&score.&I.W |  " &&OTHL&score.&I " |  &&OTH&score.&I.C  |  ";
+	    %end;
+  	%end;
 
   run;
 %mend;
