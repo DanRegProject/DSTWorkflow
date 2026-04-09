@@ -23,7 +23,7 @@
             (
               select distinct &key from
               %if &primtab ne %then (
-                select p.&key from &inlib.&ds2 p, &pop q
+                select p.&key from &inlib..&ds2 p, &pop q
                 where p.pnr=q.pnr ) ;
             ) b where a.&key=b.&key;
             quit;
