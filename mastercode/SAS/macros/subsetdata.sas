@@ -14,7 +14,7 @@
       %let i=1;
       %do %while (%scan(&ds_names,&i) ne );
         %let ds=%scan(&ds_names,&i);
-        %let ds2=%sysfunc(tranwrd(&ds,&head,&primtab));
+        %if &primtab ne %then %let ds2=%sysfunc(tranwrd(&ds,&head,&primtab));
         %if %varexist(&inlib..&ds,&key) %then %do;
           proc sql inobs=&sqlmax;
           create table _tempfile_ as 
