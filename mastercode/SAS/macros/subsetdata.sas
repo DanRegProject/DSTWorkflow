@@ -50,7 +50,7 @@
       %end;
       %if &append=TRUE %THEN %DO;
         proc sort data=&outlib..&head;
-          by pnr _source_;
+          by &key _source_;
         run;
       %END;
 %END;
