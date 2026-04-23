@@ -25,6 +25,7 @@
               %if &primtab ne %then (
                 select p.&key from &inlib..&ds2 p, &pop q
                 where p.pnr=q.pnr ) ;
+              %else &pop;
             ) b where a.&key=b.&key;
             quit;
           %if &append ne TRUE %THEN %DO;
