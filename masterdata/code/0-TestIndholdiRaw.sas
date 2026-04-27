@@ -2,7 +2,7 @@
 		%if &withyear eq TRUE %then options orientation=landscape;;
 title "Report in library : &in";
 	proc sql noprint;
-    create table tables as select distinct memname as table, nobs
+    create table tables as select distinct memname as table, nobs, nvar, num_character, num_numeric
             from dictionary.tables
             where libname=upcase("&in") and upcase(memtype)="DATA";
 
@@ -44,19 +44,39 @@ title "Report in library : &in";
 	run;
 title2 "Single table entities";
 	proc print data=tabless;
+	var table nobs nvar num_numeric num_character;
 	run;
-title2 "Multible table entities";
+title2 "Multiple table entities";
+title3 "Number of observations";
 	proc tabulate data=tablesm missing;
+		where year>.;
 		class tablegrp year;
 		var nobs;
 		table tablegrp, year*nobs=''*min=''*f=10.0;
 	run;
+title2 "Multiple table entities";
+title3 "Number of variables and numeric variables";
+	proc tabulate data=tablesm missing;
+		where year>.;
+		class tablegrp year;
+		var nobs;
+		table tablegrp*(nvar num_numeric)=''*min=''*f=10.0, year;
+	run;
 title2 "Variable overview for each table";
 	proc tabulate data=variables missing;
+		where year>.;
 		class tablegrp name year;
 		table tablegrp, name, year*N;
 	run;
-	 options orientation=portrait;
+
+	proc sql;
+	create table variables2 
+		as select distinct tablegrp, name, type, label 
+		from variables;
+	proc print data=variables2 noobs;
+		var tablegrp name type label;
+	run;
+	options orientation=portrait;
 %mend;
 ods pdf file="&logdir/rawdatareport.pdf";
 %scanlib(in=rawdata);
