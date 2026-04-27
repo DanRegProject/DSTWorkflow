@@ -45,7 +45,8 @@
     %cleanup(char_vars,lib=work);
     %LET i=1;
     %DO %while  (%scan(&ds_names,&i) ne );
-        %LET ds=%scan(&ds_names,&i);
+        %LET ds=%UPCASE(%scan(&ds_names,&i));
+		%IF not %sysfunc(exist(&in..&ds)) %THEN %PUT ERROR: The file &in..&ds noes not exist;
         %IF %sysfunc(exist(&in..&ds)) %THEN %DO;
 
             proc sql noprint;
@@ -79,11 +80,11 @@
         put "&lenstr.;";
         put "set &in..&ds(";
                     %IF %UPCASE(&test)=TRUE %THEN put " obs=10000";;
-                    %IF &pnrvar ne pnr %THEN put "rename=(&pnrvar=pnr)";;
+                    %IF &pnrvar ne pnr AND &pnrvar ne %THEN put "rename=(&pnrvar=pnr)";;
                     %IF &keep ne %THEN put "keep=&pnrvar &keep";;
         put ")";
         put ";";
-        %IF %varexist(&in..&ds,&pnrvar) %THEN %DO;
+        %IF &pnrvar ne %THEN %DO;
             put "if missing(strip(pnr)) then delete;";
         %END;
                     /* omdøb alle variable som har et foranstillet type indikator fx C_, D_  */
