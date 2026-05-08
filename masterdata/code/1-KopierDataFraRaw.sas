@@ -46,7 +46,7 @@
     %LET i=1;
     %DO %while  (%scan(&ds_names,&i) ne );
         %LET ds=%UPCASE(%scan(&ds_names,&i));
-		%IF not %sysfunc(exist(&in..&ds)) %THEN %PUT ERROR: The file &in..&ds noes not exist;
+		%IF not %sysfunc(exist(&in..&ds)) %THEN %PUT ERROR: The file &in..&ds does not exist;
         %IF %sysfunc(exist(&in..&ds)) %THEN %DO;
 
             proc sql noprint;
