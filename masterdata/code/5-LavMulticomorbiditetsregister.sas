@@ -10,23 +10,22 @@
     %local I name;
 	/* FIND DIAGNOSEDATA */
     %let I=1;
-    %if %symexist(LPR&score.&I) %then %do;
-		%getDiag(work,
-	        %do %while(%symexist(LPR&score.&I));
-	            %let name = &score.&I;
-	            %if &&LPR&score.&I ne %then  &name;
+    %if %symexist(DIAG&score.&I) %then %do;
+        %do %while(%symexist(DIAG&score.&I));
+            %let name = &score.&I;
+	            %if &&DIAG&score.&I ne %then	%get(work, &name, type=DIAG, ICD8=TRUE
+				%if %symexist(DIAG&score.&I.C) %THEN , subset=&&DIAG&score.&I.C;);;
 			    %let I=%eval(&I+1);
 	        %end;
-		, ICD8=TRUE);
         %reduceLPRmulticotables(&score);
     %end;
     /* FIND RECEPTDATA*/
     %let I=1;
-    %if %symexist(ATC&score.&I) %then %do;
-		%getMedi(work,
-	        %do %while(%symexist(ATC&score.&I));
+    %if %symexist(LMDB&score.&I) %then %do;
+		%get(work,
+	        %do %while(%symexist(LMDB&score.&I));
 	            %let name = &score.&I;
-	            %if &&ATC&score.&I ne %then  &name;
+	            %if &&LMDB&score.&I ne %then  &name;
 	            %let I=%eval(&I+1);
 	        %end;
 		);
@@ -39,12 +38,12 @@
     %local I sets name recn;
     %let I=1;
 
-    %if %symexist(LPR&score.&I) %then %do;
-        %do %while(%symexist(LPR&score.&I));
-           %let name = LPR&score.&I;
-           %if &&LPR&score.&I ne %then %do;
+    %if %symexist(DIAG&score.&I) %then %do;
+        %do %while(%symexist(DIAG&score.&I));
+           %let name = DIAG&score.&I;
+           %if &&DIAG&score.&I ne %then %do;
 
-            proc sort data=work.lpr&score.&I.all nodupkey out=work.&score.&I._red;
+            proc sort data=work.DIAG&score.&I.all nodupkey out=work.&score.&I._red;
             *where &projectdate between rec_in and rec_out;
             by pnr start;
             %runquit;
@@ -52,14 +51,14 @@
             data work.&score.&I._red;
                 length outcome $20. label $50.;
                 set work.&score.&I._red;
-                %if %symexist(LPR&score.&I.C) %then where &&LPR&score.&I.C;;
+                %if %symexist(DIAG&score.&I.C) %then where &&DIAG&score.&I.C;;
                 wdays=.;
-                %if %symexist(LPR&score.&I.D) %then wdays = &&LPR&score.&I.D;;
+                %if %symexist(DIAG&score.&I.D) %then wdays = &&DIAG&score.&I.D;;
 
-                weight = &&LPR&score.&I.W;
+                weight = &&DIAG&score.&I.W;
 
                 outcome="&name";
-                label=&&LPRL&score.&I;
+                label=&&DIAGL&score.&I;
                 indate=start; format start date10.;
                 %let recn=;
                 %if %symexist(update) %then %do;
@@ -80,7 +79,7 @@
                     %if %symexist(update) %then %do;
                         %if &update=TRUE %then %do;
                 data work.base&score.&I._red;
-                    set mcolib.LPR&score;
+                    set mcolib.DIAG&score;
                     where outcome="&name";
                     id=catx(" ", of outcome indate weight);
                 %runquit;
@@ -108,14 +107,14 @@
       %end;
     %end;
 
-    data mcolib.LPR&score;
+    data mcolib.DIAG&score;
         set &sets;
         by pnr outcome;
         if pnr ne "";
 		format indate date10.;
     %runquit;
 
-    proc sort data=mcolib.LPR&score;
+    proc sort data=mcolib.DIAG&score;
         by pnr outcome indate rec_in rec_out weight;
     %runquit;
 	%let sets=%sysfunc(tranwrd(&sets,work.,));
@@ -126,10 +125,10 @@
 %macro reduceMEDImulticotables(score);
     %local I sets name recn;
     %let I=1;
-    %if %symexist(ATC&score.&I) %then %do;
-       %do %while(%symexist(ATC&score.&I));
-           %let name = ATC&score.&I;
-           %if &&ATC&score.&I ne %then %do;
+    %if %symexist(LMDB&score.&I) %then %do;
+       %do %while(%symexist(LMDB&score.&I));
+           %let name = LMDB&score.&I;
+           %if &&LMDB&score.&I ne %then %do;
 
             proc sort data=work.LMDB&score.&I.all nodupkey out=work.&score.&I._red;
       *      where &projectdate between rec_in and rec_out;
@@ -139,11 +138,11 @@
             data work.&score.&I._red;
                 set work.&score.&I._red;
                 wdays=.;
-                %if %symexist(ATC&score.&I.D) %then wdays = &&ATC&score.&I.D;;
-                weight = &&ATC&score.&I.W;
+                %if %symexist(LMDB&score.&I.D) %then wdays = &&LMDB&score.&I.D;;
+                weight = &&LMDB&score.&I.W;
                 length outcome $20. label $50.;
                 outcome="&name";
-                label=&&ATCL&score.&I;
+                label=&&LMDBL&score.&I;
 
                 %let recn=;
                 %if %symexist(update) %then %do;
