@@ -32,7 +32,7 @@
 %LET CARprim=tumor_aarlig;
 
 /* defined data types except hospital discharge data  in %get()*/
-%LET xtragettypes = LMDB PATO LAB VAR;
+%LET xtragettypes = LMDB PATO LAB CAR;
 
 /* Default key variables to link tables in %get()*/
 %LET DIAGstdgetkeyvar = kontakt_id;
