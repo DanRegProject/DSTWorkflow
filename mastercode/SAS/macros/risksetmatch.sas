@@ -35,8 +35,9 @@ run;
 */
 * Cases w/case date and birth year;
 %if "&crit" ne "" %then %do;
-    %let crit = %sysfunc(tranwrd(&crit,&basedate,a.t));
+    %let crit = %sysfunc(prxchange(s/\b&basedate\b/a.t/i,-1&crit));
     %let concritvarx = %commas(&concritvar);
+    %let casecritvarx = %commas(&ccasecritvar);
   %end;
     proc sql;
 	     create table _con_&ds as
@@ -58,7 +59,7 @@ create table _con_&ds as
 	_con_&ds a, master.population b
 	where a.pnr=b.pnr and b.rec_in<=&ajour<b.rec_out;
 
-/* ekstra DS trin for at håndtere migration og begrænse til relevante controller */
+/* ekstra DS trin for at hÃ¥ndtere migration og begrÃ¦nse til relevante controller */
     create table _con_&ds as
     select a.*,b.indv_dato, b.udv_dato from
       (select * from _con_&ds where &fromYr-&difbirthyear <= year(birthdate) <= &toYr+&difbirthyear) a
@@ -68,7 +69,7 @@ create table _con_&ds as
 
 	quit;
 
-/* hvis basedate er oplyst så er det også en case */
+/* hvis basedate er oplyst sÃ¥ er det ogsÃ¥ en case */
 data _con_&ds;
     merge &basedata(keep=pnr &basedate) _con_&ds;
     by pnr;
@@ -84,7 +85,9 @@ run;
             select distinct a.pnr as pnr_case,  b.pnr as pnr_control, a.sex, a.t as &basedate, (a.pnr ne b.pnr)*(uniform(&yr)+1) as ran
             %if "&crit" ne "" %then , &concritvarx;
             from
-            (select pnr, sex, birthdate as casebirth, &basedate as t from _cas_&ds
+            (select pnr, sex, birthdate as casebirth, &basedate as t 
+			%if "&casecritvar" ne "" %then , &casecritvarx;
+			from _cas_&ds
             where &basedate ne . and year(birthdate) = &yr ) a /* All study cases with given birth year plus/minus difbirthyear */
             inner join
             (select * /*pnr, sex*/, birthdate as controlbirth, &basedate as t /*, udv_dato, indv_dato, birthdate, deathdate*/ from _con_&ds
