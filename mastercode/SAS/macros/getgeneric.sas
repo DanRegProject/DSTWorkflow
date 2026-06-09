@@ -233,7 +233,14 @@ quit;
 %let rename2=%sysfunc(tranwrd(&rename2," _","_"));
 
 proc sql noprint inobs=&sqlmax;
-   create table work.&locdsn1 as select &locgetvar1 from master.&locdsn1;
+   create table work.&locdsn1 as select &locgetvar1 
+   %if &&&type.stdgetdatevar eq and (&index(&locdsn1,19)>0 or &index(&locdsn1,20)>0) %then %do;
+              %if %index(&locdsn1,19)>0 %then %let pos=%index(&locdsn1,19);
+              %else %let pos=%index(&locdsn1,20);
+              %let yr= %sysfunc(substr(&locdsn1,&pos,4));
+              , mdy(12,31,&yr) as &type.date format=date10.
+   %end;
+   from master.&locdsn1;
 %if &dsn2 ne %then create table work.&locdsn2(rename=(&rename)) as select &locgetvar2 from master.&locdsn2;;
 %if &dsn3 ne %then create table work.&locdsn3(rename=(&rename2)) as select &locgetvar3 from master.&locdsn3;;
 
@@ -263,7 +270,7 @@ proc sql inobs=&sqlmax;
          %if &dsn3 ne %then inner join &locdsn3 c on
             (a.&&&type.stdgetkeyvar=c.&&&type.stdgetkeyvar._c);
 
-   %if &dlstcnt>0 or %quote(&subset) ne %then where;
+   %if &dlstcnt>0 or %quote(&subset) ne %then %do; where;
       %if &dlstcnt > 0 %then %do;
          (
             %do v=1 %to &dlstcnt;
@@ -276,11 +283,11 @@ proc sql inobs=&sqlmax;
    %if &dlstcnt>0 and %quote(&subset) ne  %then and;
    %if %quote(&subset) ne  %then &subset;
 
-   %if "&fromdate" ne "" %then %do;
+   %if "&fromdate" ne "" and &&&type.stdgetdatevar ne %then %do;
       %if &dlstcnt>0 or %quote(&subset) ne  %then and; &&&type.stdgetdatevar
          between &fromdate and &todate
    %end;
-
+   %end;        
    ;
 quit;
 %if &lastrun=1 %THEN %DO;
