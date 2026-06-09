@@ -2,6 +2,7 @@
   %PUT start merge: %qsysfunc(datetime(),datetime20.3);
   %local I nsets nvar outdat error;
   %LET error=0;
+  %IF &datevar= %THEN %LET datevar = &&&type.stdgetdatevar;
   %IF &basedata= or &inlib= or &outlib= or &type= or &datevar= or &sets= or &invar=  %THEN %DO;
       %PUT merge ERROR: Required arguments not specified, basedata, inlib, outlib, type, datevar, sets, invar;
      %LET error=1;
@@ -10,8 +11,8 @@
       %PUT merge ERROR: Only one type allowed;
       %LET error=1;
   %END;
-  %IF %sysfunc(find("LPR LMDB OPR UBE PATO LAB CAR",&type,i))=0 %THEN %DO;
-      %PUT merge ERROR: type (&type) not one of : LPR LMDB OPR UBE PATO LAB CAR;
+  %IF %sysfunc(find("&xtragettypes",&type,i))=0 %THEN %DO;
+      %PUT merge ERROR: type (&type) not one of : &xtragettypes;
       %LET error=1;
   %END;
   %IF &outvar eq %THEN %LET outvar=&invar;
