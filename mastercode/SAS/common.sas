@@ -24,49 +24,143 @@
 %LET LPR3opr=procedurekonopr; /*procedurer_kirurgi under LPR_F */
 %LET LPR3ube=procedurekonube; /*procedurer_andre under LPR_F */
 
-%LET LMDBprim=LMDB;
-%LET LABprim=LAB_DM_FORSKER;
-%LET PATOprim=fctrekvisition;
-%LET PATOpato=dimpatologiskdiagnose;
-%LET PATOpato2=fctpatologiskprocedure;
-%LET CARprim=tumor_aarlig;
-
 /* defined data types except hospital discharge data  in %get()*/
-%LET xtragettypes = LMDB PATO LAB CAR;
-
-/* Default key variables to link tables in %get()*/
-%LET DIAGstdgetkeyvar = kontakt_id;
-%LET UBEstdgetkeyvar = kontakt_id;
-%LET OPRstdgetkeyvar = kontakt_id;
-%LET PATOstdgetkeyvar = dw_ek_rekvisition;
-
-/* Default selected variables extraced in %get()*/
-%LET DIAGstdgetvar = pnr start slut prioritet diag diagtype kontakt_id forloeb_id;
-%LET UBEstdgetvar = pnr start start_proc proc proctype kontakt_id;
-%LET OPRstdgetvar = pnr start start_proc proc proctype kontakt_id;
-%LET LMDBstdgetvar = pnr eksd atc;
-%LET LABstdgetvar =;
-%LET PATOstdgetvar =pnr dw_ek_rekvisition dato_rekvirering diagnose_snomed_kode diagnose_snomed_sekvensnummer instans_undersogende materialenummer anden_specialprocedure hasteprocedure materiale_antal materialetype specielle_analyser;
-%LET CARstdgetvar =;
-
- /* Default code variable used for row selection in %get() */
-%LET DIAGstdgetcodevar = diag;
-%LET UBEstdgetcodevar = proc;
-%LET OPRstdgetcodevar = proc;
-%LET LMDBstdgetcodevar = atc;
-%LET LABstdgetcodevar = ;
-%LET PATOstdgetcodevar = diagnose_snomed_kode;
-%LET CARstdgetcodevar = diagnose;
-
- /* Default date variable used for row selection and ordering in %get() */
-%LET DIAGstdgetdatevar = start;
-%LET UBEstdgetdatevar = start_proc;
-%LET OPRstdgetdatevar = start_proc;
-%LET LMDBstdgetdatevar = eksd;
-%LET LABstdgetdatevar = ;
-%LET PATOstdgetdatevar = dato_rekvirering;
-%LET CARstdgetdatevar = ;
-
+%LET xtragettypes = ;
+/* For datasources DIAG, OPR, UBE data are distributes on several tables             */
+/* hence table information is not given in datasourceDef, but specifically as above. */
+%datasourceDef(
+/* data source header (type in %indicatorDef, %get, %merge) */                                          
+   head=DIAG,
+/* Name (Prefix) of source tables with pnr */                      
+   keytbl=,
+/* Name (Prefix) of source tables with data if not in keytbl, optional */ 
+   datatbl=,
+/* Name (Prefix) of source tables with supplemental data, optional */ 
+   datatbl2=,
+/* Internal key variable linking keytbl and datatbl/datatbl2, optional */    
+   key=kontakt_id,
+/* Code variable optionally used to restrict on codes, optional */ 
+   code=diag,
+/* Date variable optionally used to restrict on period, optional */ 
+   date=start,
+/* Minimum standard variables to extract, optional */
+/* further may be added in %get                    */
+   select=pnr start slut prioritet diag diagtype kontakt_id forloeb_id
+);
+%datasourceDef(
+/* data source header (type in %indicatorDef, %get, %merge)*/                                          
+   head=OPR,
+/* Name (Prefix) of source tables with pnr */                      
+   keytbl=,
+/* Name (Prefix) of source tables with data if not in keytbl, optional */ 
+   datatbl=,
+/* Name (Prefix) of source tables with supplemental data, optional */ 
+   datatbl2=,
+/* Internal key variable linking keytbl and datatbl/datatbl2, optional */    
+   key=kontakt_id,
+/* Code variable optionally used to restrict on codes, optional */ 
+   code=proc,
+/* Date variable optionally used to restrict on period, optional */ 
+   date=start_proc,
+/* Minimum standard variables to extract, optional */
+/* further may be added in %get                    */
+   select=pnr start start_proc proc proctype kontakt_id
+);
+%datasourceDef(
+/* data source header (type in %indicatorDef, %get, %merge)*/                                          
+   head=UBE,
+/* Name (Prefix) of source tables with pnr */                      
+   keytbl=,
+/* Name (Prefix) of source tables with data if not in keytbl, optional */ 
+   datatbl=,
+/* Name (Prefix) of source tables with supplemental data, optional */ 
+   datatbl2=,
+/* Internal key variable linking keytbl and datatbl/datatbl2, optional */    
+   key=kontakt_id,
+/* Code variable optionally used to restrict on codes, optional */ 
+   code=proc,
+/* Date variable optionally used to restrict on period, optional */ 
+   date=start_proc,
+/* Minimum standard variables to extract, optional */
+/* further may be added in %get                    */
+   select=pnr start start_proc proc proctype kontakt_id
+);
+%datasourceDef(
+/* data source header (type in %indicatorDef, %get, %merge)*/                                          
+   head=LMDB,
+/* Name (Prefix) of source tables with pnr */                      
+   keytbl=LMDB,
+/* Name (Prefix) of source tables with data if not in keytbl, optional */ 
+   datatbl=,
+/* Name (Prefix) of source tables with supplemental data, optional */ 
+   datatbl2=,
+/* Internal key variable linking keytbl and datatbl/datatbl2, optional */    
+   key=,
+/* Code variable optionally used to restrict on codes, optional */ 
+   code=atc,
+/* Date variable optionally used to restrict on period, optional */ 
+   date=eksd,
+/* Minimum standard variables to extract, optional */
+/* further may be added in %get                    */
+   select=pnr eksd atc
+);
+%datasourceDef(
+/* data source header (type in %indicatorDef, %get, %merge)*/                                          
+   head=LAB,
+/* Name (Prefix) of source tables with pnr */                      
+   keytbl=LAB_DM_FORSKER,
+/* Name (Prefix) of source tables with data if not in keytbl, optional */ 
+   datatbl=,
+/* Name (Prefix) of source tables with supplemental data, optional */ 
+   datatbl2=,
+/* Internal key variable linking keytbl and datatbl/datatbl2, optional */    
+   key=,
+/* Code variable optionally used to restrict on codes, optional */ 
+   code=,
+/* Date variable optionally used to restrict on period, optional */ 
+   date=,
+/* Minimum standard variables to extract, optional */
+/* further may be added in %get                    */
+   select=
+);
+%datasourceDef(
+/* data source header (type in %indicatorDef, %get, %merge)*/                                          
+   head=PATO,
+/* Name (Prefix) of source tables with pnr */                      
+   keytbl=fctrekvisition,
+/* Name (Prefix) of source tables with data if not in keytbl, optional */ 
+   datatbl=dimpatologiskdiagnose,
+/* Name (Prefix) of source tables with supplemental data, optional */ 
+   datatbl2=fctpatologiskprocedure,
+/* Internal key variable linking keytbl and datatbl/datatbl2, optional */    
+   key=dw_ek_rekvisition,
+/* Code variable optionally used to restrict on codes, optional */ 
+   code=diagnose_snomed_kode,
+/* Date variable optionally used to restrict on period, optional */ 
+   date=dato_rekvirering,
+/* Minimum standard variables to extract, optional */
+/* further may be added in %get                    */
+   select=pnr dw_ek_rekvisition dato_rekvirering diagnose_snomed_kode diagnose_snomed_sekvensnummer instans_undersogende materialenummer anden_specialprocedure hasteprocedure materiale_antal materialetype specielle_analyser
+);
+%datasourceDef(
+/* data source header (type in %indicatorDef, %get, %merge)*/                                          
+   head=CAR,
+/* Name (Prefix) of source tables with pnr */                      
+   keytbl=tumor_aarlig,
+/* Name (Prefix) of source tables with data if not in keytbl, optional */ 
+   datatbl=,
+/* Name (Prefix) of source tables with supplemental data, optional */ 
+   datatbl2=,
+/* Internal key variable linking keytbl and datatbl/datatbl2, optional */    
+   key=,
+/* Code variable optionally used to restrict on codes, optional */ 
+   code=diagnose,
+/* Date variable optionally used to restrict on period, optional */ 
+   date=,
+/* Minimum standard variables to extract, optional */
+/* further may be added in %get                    */
+   select=
+);
 
 libname master   "D:\data\Workdata\&ProjectNumber/data/SAS/Master"              access=readonly ;
 libname charlib  "D:\data\Workdata\&ProjectNumber/data/SAS/Master"              access=readonly ;
