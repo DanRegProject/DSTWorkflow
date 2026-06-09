@@ -45,3 +45,30 @@
       %end;
    %end;
 %mend;
+
+%macro datasourceDef(
+/* data source header (type in %indicatorDef, %get, %merge)*/                                          
+   head=,
+/* Name (Prefix) of source tables with pnr */                      
+   keytbl=,
+/* Name (Prefix) of source tables with data if not in keytbl, optional */ 
+   datatbl=,
+/* Name (Prefix) of source tables with supplemental data, optional */ 
+   datatbl2=,
+/* Internal key variable linking keytbl and datatbl/datatbl2, optional */    
+   key=,
+/* Date variable optionally used to restrict on period, optional */ 
+   date=,
+/* Minimum standard variables to extract, optional */
+/* further may be added in %get                    */
+   select=
+);
+   %global &head.prim &head.stdgetvar &head.stdgetcodevar &head.stdgetdatevar;
+   %let &head.prim=&keytbl;
+   %if &keytbl eq and &datatbl ne %then %let &head.prim=&datatbl;
+   %if &keytbl ne and &datatbl ne %then %let &head.&head=&datatbl;
+   %if &keytbl ne and &datatbl ne and &datatbl2 ne %then %let &head.&head.2=&datatbl2;
+   %let &head.stdgetvar = &select; 
+   %let &head.stdgetcodevar = &key; 
+   %let &head.stdgetdatevar = &date;
+%mend;
