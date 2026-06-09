@@ -74,4 +74,6 @@
    %let &head.stdgetkeyvar = &key; 
    %let &head.stdgetcodevar = &code; 
    %let &head.stdgetdatevar = &date;
+
+   %LET xtragettypes = &xtragettypes &head;
 %mend;
