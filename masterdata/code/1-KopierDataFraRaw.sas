@@ -66,6 +66,7 @@
                 %END;
             quit;
         %END;
+        %IF not %varexist(&in..&ds,&pnrvar) %THEN %LET pnrvar=;
         proc sql;
             %IF %sysfunc(exist(&out..&ds)) %THEN drop table &out..&ds;;
             %IF %sysfunc(exist(&out..&ds,VIEW)) %THEN drop view &out..&ds;;    
