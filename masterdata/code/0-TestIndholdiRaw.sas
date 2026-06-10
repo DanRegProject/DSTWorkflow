@@ -7,7 +7,7 @@ title "Report in library : &in";
             where libname=upcase("&in") and upcase(memtype)="DATA";
 
     proc sql noprint;
-        create table variables as select distinct memname as table, name, type
+        create table variables as select distinct memname as table, name, type, label
             from dictionary.columns
             where libname=upcase("&in") 
             order by memname, name;
@@ -60,7 +60,7 @@ title3 "Number of variables and numeric variables";
 		where year>.;
 		class tablegrp year;
 		var nvar num_numeric;
-		table tablegrp*(nvar num_numeric)=''*min=''*f=10.0, year;
+		table tablegrp*(nvar num_numeric)*min=''*f=10.0, year;
 	run;
 title2 "Variable overview for each table";
 title3;
