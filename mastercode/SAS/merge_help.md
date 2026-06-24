@@ -42,7 +42,8 @@ Note: The macros assume `pnr` is the person identifier present both in the input
   invar=,      /* REQUIRED: space-separated list of variables to extract from input datasets */
   outvar=,     /* OPTIONAL: space-separated list of output variable names to use in the reduced files. Defaults to same as invar. Must have same number of elements as invar */
   subset=,     /* OPTIONAL: expression applied to the join (e.g. a.date >= '01jan2010'd). Added as an `AND` clause when joining to &basedata. Use macro-safe quoting where needed. */
-  postfix=     /* OPTIONAL: postfix to append to intermediate reduced dataset names */
+  postfix=,     /* OPTIONAL: postfix to append to intermediate reduced dataset names */
+  CompIndex=LT  /* REQUIRED: Comparator to evaluate datevar after IndexDate, LE (<=) useful for medication data in particular */
 );
 ```
 
