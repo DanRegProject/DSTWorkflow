@@ -1,4 +1,6 @@
-%MACRO merge(basedata=,inlib=work,outlib=work,IndexDate=,type=,datevar=,sets=,invar=,outvar=,subset=,postfix=);
+%MACRO merge(basedata=,inlib=work,outlib=work,IndexDate=,type=,datevar=,
+			sets=,invar=,outvar=,subset=,postfix=,
+			CompIndex=LT);
   %PUT start merge: %qsysfunc(datetime(),datetime20.3);
   %local I nsets nvar outdat error;
   %LET error=0;
@@ -13,6 +15,10 @@
   %END;
   %IF %sysfunc(find("&xtragettypes",&type,i))=0 %THEN %DO;
       %PUT merge ERROR: type (&type) not one of : &xtragettypes;
+      %LET error=1;
+  %END;
+  %IF %sysfunc(find("LT LE < <=",%upcase(&CompIndex),i))=0 %THEN %DO;
+      %PUT merge ERROR: CompIndex (&CompIndex) not one of : LT LE < <=;
       %LET error=1;
   %END;
   %IF &outvar eq %THEN %LET outvar=&invar;
@@ -70,10 +76,11 @@
 %MACRO reduce(indata,outdata,type,outcome,IndexDate,varlist,datevar);
   %local i temp var varnar varcar nrep format;
   %PUT start reduce: %qsysfunc(datetime(), datetime20.3);
+  %PUT Comparator to define after: &indexDate &CompIndex &datevar;
   %LET temp=%NewDatasetName(temp);
   proc sql;
     create table &temp as
-      select a.*, %IF &IndexDate ne %THEN (a.&IndexDate<a.&datevar); %else 1;  as afterbase_local
+      select a.*, %IF &IndexDate ne %THEN (a.&IndexDate &CompIndex a.&datevar); %else 1;  as afterbase_local
       from &indata a
       order by a.pnr, %IF &IndexDate ne %THEN  &IndexDate,; a.&datevar;
     %sqlquit;
