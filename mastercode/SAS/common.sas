@@ -31,6 +31,8 @@
 %datasourceDef(
 /* data source header (type in %indicatorDef, %get, %merge) */                                          
    head=DIAG,
+/* hospital data sources for codes */
+   source=LPR PRIV PSYK LPR3,
 /* Name (Prefix) of source tables with pnr */                      
    keytbl=,
 /* Name (Prefix) of source tables with data if not in keytbl, optional */ 
@@ -50,6 +52,8 @@
 %datasourceDef(
 /* data source header (type in %indicatorDef, %get, %merge)*/                                          
    head=OPR,
+/* hospital data sources for codes */
+   source=LPR PRIV LPR3,
 /* Name (Prefix) of source tables with pnr */                      
    keytbl=,
 /* Name (Prefix) of source tables with data if not in keytbl, optional */ 
@@ -69,6 +73,8 @@
 %datasourceDef(
 /* data source header (type in %indicatorDef, %get, %merge)*/                                          
    head=UBE,
+/* hospital data sources for codes */
+   source=LPR PRIV LPR3,
 /* Name (Prefix) of source tables with pnr */                      
    keytbl=,
 /* Name (Prefix) of source tables with data if not in keytbl, optional */ 
