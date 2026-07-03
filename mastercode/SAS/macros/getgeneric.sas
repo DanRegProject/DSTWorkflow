@@ -1,5 +1,5 @@
 %macro get(outlib=work, sets=, fromyear=1997, type=,
-           indata=, outdata=, SOURCE=LPR PSYK PRIV LPR3, fromdate=, todate=,
+           indata=, outdata=,  fromdate=, todate=,
            getvar=, subset=);
 
 %start_timer(get); /* measure time for this macro */
@@ -35,8 +35,8 @@
 
    %let firstrun=1;
    %let lastrun=0;
-
-   %IF %sysfunc(find("&xtragettypes",&type,i)) ne 0 %THEN %LET SOURCE=&TYPE;
+   %let source = &&&type.source;
+   %IF "&&&type.source" eq "" %then %let source=&type;
    %let nsource = %sysfunc(countw(&SOURCE));
 
    %do N=1 %to &nsets;
