@@ -49,6 +49,8 @@
 %macro datasourceDef(
 /* data source header (type in %indicatorDef, %get, %merge) */                                          
    head=,
+/* file source header, only if data are distributed along several files, as is the case for hospital discharge data */
+   source=,
 /* Name (Prefix) of source tables with pnr */                      
    keytbl=,
 /* Name (Prefix) of source tables with data if not in keytbl, optional */ 
@@ -65,8 +67,10 @@
 /* further may be added in %get                    */
    select=
 );
-   %global &head.prim &head.&head &head.&head.2 &head.stdgetvar &head.stdgetcodevar &head.stdgetkeyvar &head.stdgetdatevar;
+   %global &head.prim &head.&head &head.&head.2 &head.stdgetvar &head.stdgetcodevar &head.stdgetkeyvar &head.stdgetdatevar
+   &head.source;
    %let &head.prim=&keytbl;
+   %let &head.source=&source;
    %if &keytbl eq and &datatbl ne %then %let &head.prim=&datatbl;
    %if &keytbl ne and &datatbl ne %then %let &head.&head=&datatbl;
    %if &keytbl ne and &datatbl ne and &datatbl2 ne %then %let &head.&head.2=&datatbl2;
