@@ -13,7 +13,7 @@
     %if %symexist(DIAG&score.&I) %then %do;
         %do %while(%symexist(DIAG&score.&I));
             %let name = &score.&I;
-	            %if &&DIAG&score.&I ne %then	%get(work, &name, type=DIAG, ICD8=TRUE
+	            %if &&DIAG&score.&I ne %then	%get(outlib=work, sets=&name, type=DIAG
 				%if %symexist(DIAG&score.&I.C) %THEN , subset=&&DIAG&score.&I.C;);;
 			    %let I=%eval(&I+1);
 	        %end;
@@ -22,14 +22,12 @@
     /* FIND RECEPTDATA*/
     %let I=1;
     %if %symexist(LMDB&score.&I) %then %do;
-		%get(work,
-	        %do %while(%symexist(LMDB&score.&I));
-	            %let name = &score.&I;
-	            %if &&LMDB&score.&I ne %then  &name;
+		%do %while(%symexist(LMDB&score.&I));
+	        %let name = &score.&I;
+	        %if &&LMDB&score.&I ne %then %get(outlib=work, sets=&name, type=LMDB);
 	            %let I=%eval(&I+1);
 	        %end;
-		);
-    %reduceMEDImulticotables(&score);
+         %reduceMEDImulticotables(&score);
     %end;
 
 %mend;
