@@ -28,6 +28,8 @@
 %LET xtragettypes = ;
 /* For datasources DIAG, OPR, UBE data are distributed on several tables                   */
 /* hence table information is not given fully in datasourceDef, but specifically as above. */
+%include "&localmacropath/macros/indicatorDef.sas";
+
 %datasourceDef(
 /* data source header (type in %indicatorDef, %get, %merge) */                                          
    head=DIAG,
