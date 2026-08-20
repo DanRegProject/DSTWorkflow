@@ -216,16 +216,16 @@ proc sql noprint;
 
          select distinct upcase(name) into :locgetvar1 separated by ', ' from dictionary.columns
             where upcase(libname)="MASTER" and memname="&locdsn1"
-            %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));
+            %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));;
 %if &dsn2 ne %then
    select distinct upcase(name) into :locgetvar2 separated by ', ' from dictionary.columns
       where upcase(libname)="MASTER" and memname="&locdsn2"
-      %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));
+      %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));;
 
 %if &dsn3 ne %then
    select distinct upcase(name) into :locgetvar3 separated by ', ' from dictionary.columns
       where upcase(libname)="MASTER" and memname="&locdsn3"
-      %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));
+      %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));;
 
 quit;
 
