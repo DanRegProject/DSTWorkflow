@@ -234,7 +234,7 @@ quit;
 
 proc sql noprint inobs=&sqlmax;
    create table work.&locdsn1 as select &locgetvar1 
-   %if &&&type.stdgetdatevar eq and (&index(&locdsn1,19)>0 or &index(&locdsn1,20)>0) %then %do;
+   %if &&&type.stdgetdatevar eq and (%index(&locdsn1,19)>0 or %index(&locdsn1,20)>0) %then %do;
               %if %index(&locdsn1,19)>0 %then %let pos=%index(&locdsn1,19);
               %else %let pos=%index(&locdsn1,20);
               %let yr= %sysfunc(substr(&locdsn1,&pos,4));
