@@ -114,6 +114,25 @@
 );
 %datasourceDef(
 /* data source header (type in %indicatorDef, %get, %merge)*/                                          
+   head=HMDB,
+/* Name (Prefix) of source tables with pnr */                      
+   keytbl=indberetningmedpris,
+/* Name (Prefix) of source tables with data if not in keytbl, optional */ 
+   datatbl=,
+/* Name (Prefix) of source tables with supplemental data, optional */ 
+   datatbl2=,
+/* Internal key variable linking keytbl and datatbl/datatbl2, optional */    
+   key=,
+/* Code variable optionally used to restrict on codes, optional */ 
+   code=atc,
+/* Date variable optionally used to restrict on period, optional */ 
+   date=adm,
+/* Minimum standard variables to extract, optional */
+/* further may be added in %get                    */
+   select=pnr adm atc
+);
+%datasourceDef(
+/* data source header (type in %indicatorDef, %get, %merge)*/                                          
    head=LAB,
 /* Name (Prefix) of source tables with pnr */                      
    keytbl=LAB_DM_FORSKER,
@@ -168,6 +187,82 @@
 /* Minimum standard variables to extract, optional */
 /* further may be added in %get                    */
    select=
+);
+%datasourceDef(
+/* data source header (type in %indicatorDef, %get, %merge)*/                                          
+   head=FAIK,
+/* Name (Prefix) of source tables with pnr */                      
+   keytbl=BEF,
+/* Name (Prefix) of source tables with data if not in keytbl, optional */ 
+   datatbl=FAIK,
+/* Name (Prefix) of source tables with supplemental data, optional */ 
+   datatbl2=,
+/* Internal key variable linking keytbl and datatbl/datatbl2, optional */    
+   key=familie_id,
+/* Code variable optionally used to restrict on codes, optional */ 
+   code=,
+/* Date variable optionally used to restrict on period, optional */ 
+   date=,
+/* Minimum standard variables to extract, optional */
+/* further may be added in %get                    */
+   select=pnr familie_id famaekvivadisp_13 famsociogrup_13
+);
+%datasourceDef(
+/* data source header (type in %indicatorDef, %get, %merge)*/                                          
+   head=BEF,
+/* Name (Prefix) of source tables with pnr */                      
+   keytbl=BEF,
+/* Name (Prefix) of source tables with data if not in keytbl, optional */ 
+   datatbl=,
+/* Name (Prefix) of source tables with supplemental data, optional */ 
+   datatbl2=,
+/* Internal key variable linking keytbl and datatbl/datatbl2, optional */    
+   key=,
+/* Code variable optionally used to restrict on codes, optional */ 
+   code=,
+/* Date variable optionally used to restrict on period, optional */ 
+   date=,
+/* Minimum standard variables to extract, optional */
+/* further may be added in %get                    */
+   select=pnr civst
+);
+%datasourceDef(
+/* data source header (type in %indicatorDef, %get, %merge)*/                                          
+   head=AKM,
+/* Name (Prefix) of source tables with pnr */                      
+   keytbl=AKM,
+/* Name (Prefix) of source tables with data if not in keytbl, optional */ 
+   datatbl=,
+/* Name (Prefix) of source tables with supplemental data, optional */ 
+   datatbl2=,
+/* Internal key variable linking keytbl and datatbl/datatbl2, optional */    
+   key=,
+/* Code variable optionally used to restrict on codes, optional */ 
+   code=,
+/* Date variable optionally used to restrict on period, optional */ 
+   date=,
+/* Minimum standard variables to extract, optional */
+/* further may be added in %get                    */
+   select=pnr besks13 socio13
+);
+%datasourceDef(
+/* data source header (type in %indicatorDef, %get, %merge)*/                                          
+   head=UDD,
+/* Name (Prefix) of source tables with pnr */                      
+   keytbl=UDDF,
+/* Name (Prefix) of source tables with data if not in keytbl, optional */ 
+   datatbl=,
+/* Name (Prefix) of source tables with supplemental data, optional */ 
+   datatbl2=,
+/* Internal key variable linking keytbl and datatbl/datatbl2, optional */    
+   key=,
+/* Code variable optionally used to restrict on codes, optional */ 
+   code=,
+/* Date variable optionally used to restrict on period, optional */ 
+   date=hf_vcfra,
+/* Minimum standard variables to extract, optional */
+/* further may be added in %get                    */
+   select=pnr hfaudd
 );
 
 libname master   "D:\data\Workdata\&ProjectNumber/data/SAS/Master"              access=readonly ;
