@@ -156,11 +156,11 @@ proc sort data=&outlib..&type.&code.ALL;
    %let tablegrp = %UPCASE(&LPR3grp._);
 %end;
 
-%if &fromdate ne  %then %do;
+%if "&fromdate" ne ""  %then %do;
    %let fromdate=c.&fromdate;
-   %IF &todate ne  %THEN %LET todate=c.&todate; %ELSE %LET todate=c.&fromdate;
+   %IF "&todate" ne "" %THEN %LET todate=c.&todate; %ELSE %LET todate=c.&fromdate;
 %end;
-%if &fromyear ne  and &fromdate eq  %THEN %DO;
+%if &fromyear ne  and "&fromdate" eq "" %THEN %DO;
    %let fromdate=mdy(1,1,&fromyear);
    %LET todate=today();
 %END;
@@ -196,10 +196,10 @@ proc sql noprint;
             select trim(a.name)||'='||trim(a.name)||'_b' into :rename separated by ' '
             from (select distinct(name) from dictionary.columns
                   where upcase(libname)="MASTER" and memname="&locdsn1"
-                  %IF &getvar ne %THEN and upcase(name) in (%quotelist(&getvar, delim=%str(, )));) a,
+                  %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));) a,
                  (select distinct(name) from dictionary.columns
                   where upcase(libname)="MASTER" and memname="&locdsn2"
-                  %IF &getvar ne %THEN and upcase(name) in (%quotelist(&getvar, delim=%str(, )));) b
+                  %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));) b
             where a.name=b.name;
          %end;
 
@@ -207,25 +207,25 @@ proc sql noprint;
             select trim(a.name)||'='||trim(a.name)||'_c' into :rename2 separated by ' '
             from (select distinct(name) from dictionary.columns
                   where upcase(libname)="MASTER" and (memname="&locdsn1" or memname="&locdsn2")
-                  %IF &getvar ne %THEN and upcase(name) in (%quotelist(&getvar, delim=%str(, )));) a,
+                  %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));) a,
                  (select distinct(name) from dictionary.columns
                   where upcase(libname)="MASTER" and memname="&locdsn3"
-                  %IF &getvar ne %THEN and upcase(name) in (%quotelist(&getvar, delim=%str(, )));) b
+                  %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));) b
             where a.name=b.name;
          %end;
 
          select distinct upcase(name) into :locgetvar1 separated by ', ' from dictionary.columns
             where upcase(libname)="MASTER" and memname="&locdsn1"
-            %IF &getvar ne %THEN and upcase(name) in (%quotelist(&getvar, delim=%str(, )));
+            %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));
 %if &dsn2 ne %then
    select distinct upcase(name) into :locgetvar2 separated by ', ' from dictionary.columns
       where upcase(libname)="MASTER" and memname="&locdsn2"
-      %IF &getvar ne %THEN and upcase(name) in (%quotelist(&getvar, delim=%str(, )));
+      %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));
 
 %if &dsn3 ne %then
    select distinct upcase(name) into :locgetvar3 separated by ', ' from dictionary.columns
       where upcase(libname)="MASTER" and memname="&locdsn3"
-      %IF &getvar ne %THEN and upcase(name) in (%quotelist(&getvar, delim=%str(, )));
+      %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));
 
 quit;
 
