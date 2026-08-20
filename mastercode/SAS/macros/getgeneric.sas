@@ -270,7 +270,7 @@ proc sql inobs=&sqlmax;
          %if &dsn3 ne %then inner join &locdsn3 c on
             (a.&&&type.stdgetkeyvar=c.&&&type.stdgetkeyvar._c);
 
-   %if &dlstcnt>0 or %quote(&subset) ne %then %do; where;
+   %if &dlstcnt>0 or %quote(&subset) ne %then %do; where
       %if &dlstcnt > 0 %then %do;
          (
             %do v=1 %to &dlstcnt;
