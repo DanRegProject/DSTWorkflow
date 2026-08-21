@@ -1,6 +1,6 @@
 %macro get(outlib=work, sets=, fromyear=1997, type=,
            indata=, outdata=,  fromdate=, todate=today(),
-           getvar=, subset=);
+           getvar=, subset=, icd8=FALSE);
 
 %start_timer(get); /* measure time for this macro */
 %let type=%UPCASE(&type);
@@ -54,7 +54,8 @@
           %if &type=&source %then %let ftype=prim; %else %let ftype=&type;
           %put >Search for &type.&code in &stype.&ftype: &&&stype.&ftype <;
           %if %symexist(&stype.&ftype) %then %do;
-           %findrows(outdata=&type.&code.ALL&s, outcome=&code, code=&&&type&code, indata=&indata,
+           %findrows(outdata=&type.&code.ALL&s, outcome=&code, code=&&&type&code
+           %if %upcase(&icd8)=TRUE and %symexist(&type.&code._icd8) %then &&&type&code._icd8;, indata=&indata,
           fromyear=&fromyear, type=&type, SOURCE=&stype, returncode=RC,
           fromdate=&fromdate, todate=&todate,
           getvar=&getvar, subset=&subset); /*See above*/
