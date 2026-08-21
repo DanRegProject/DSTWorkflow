@@ -1,5 +1,5 @@
 %macro get(outlib=work, sets=, fromyear=1997, type=,
-           indata=, outdata=,  fromdate=, todate=,
+           indata=, outdata=,  fromdate=, todate=today(),
            getvar=, subset=);
 
 %start_timer(get); /* measure time for this macro */
@@ -156,13 +156,8 @@ proc sort data=&outlib..&type.&code.ALL;
    %let tablegrp = %UPCASE(&LPR3grp._);
 %end;
 
-%if "&fromdate" ne ""  %then %do;
-   %let fromdate=c.&fromdate;
-   %IF "&todate" ne "" %THEN %LET todate=c.&todate; %ELSE %LET todate=c.&fromdate;
-%end;
 %if &fromyear ne  and "&fromdate" eq "" %THEN %DO;
    %let fromdate=mdy(1,1,&fromyear);
-   %LET todate=today();
 %END;
 %LET ds_names=;
 
@@ -244,7 +239,7 @@ proc sql noprint inobs=&sqlmax;
 %if &dsn2 ne %then create table work.&locdsn2(rename=(&rename)) as select &locgetvar2 from master.&locdsn2;;
 %if &dsn3 ne %then create table work.&locdsn3(rename=(&rename2)) as select &locgetvar3 from master.&locdsn3;;
 
-   %IF &indata ne or "&fromdate" ne "" %then %do;
+   %IF &indata ne  %then %do;
       delete from work.&locdsn1  where
             pnr not in (select distinct pnr from &indata)
          ;
