@@ -11,23 +11,26 @@
 	/* FIND DIAGNOSEDATA */
     %let I=1;
     %if %symexist(DIAG&score.&I) %then %do;
+		%get(outlib=work, type=DIAG, sets=
         %do %while(%symexist(DIAG&score.&I));
             %let name = &score.&I;
-	            %if &&DIAG&score.&I ne %then	%get(outlib=work, sets=&name, type=DIAG
-				%if %symexist(DIAG&score.&I.C) %THEN , subset=&&DIAG&score.&I.C;);;
-			    %let I=%eval(&I+1);
-	        %end;
+	        &name
+			%let I=%eval(&I+1);
+	    %end;
+		);
         %reduceLPRmulticotables(&score);
     %end;
     /* FIND RECEPTDATA*/
     %let I=1;
     %if %symexist(LMDB&score.&I) %then %do;
+		%get(outlib=work, type=LMDB, sets=
 		%do %while(%symexist(LMDB&score.&I));
 	        %let name = &score.&I;
-	        %if &&LMDB&score.&I ne %then %get(outlib=work, sets=&name, type=LMDB);
-	            %let I=%eval(&I+1);
-	        %end;
-         %reduceMEDImulticotables(&score);
+			&name 
+	    	%let I=%eval(&I+1);
+	    %end;
+		);
+        %reduceMEDImulticotables(&score);
     %end;
 
 %mend;
