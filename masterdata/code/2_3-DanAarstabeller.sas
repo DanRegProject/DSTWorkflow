@@ -19,7 +19,7 @@
 	    create table work.&tab as 
 		    select * from &lib..&tab;
 		    %DO yr=&startyr %to &endyr;
-				%if &primtab ne not %sysfunc(exist(&lib..&primtab._&yr)) %then %put ERROR: the file &lib..&primtab._&yr does not exist;
+				%if &primtab ne and not %sysfunc(exist(&lib..&primtab._&yr)) %then %put ERROR: the file &lib..&primtab._&yr does not exist;
 				%else %do;
 				  create table &lib..&tab2._&yr.&postfix as
 			        select * 
