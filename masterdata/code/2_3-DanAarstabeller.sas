@@ -1,61 +1,45 @@
-%macro danaarstab(tab,var,primtab=,startyr=2018,in=master,dropview=TRUE,postfix=,where=);
-%start_log(&logdir,2_3-DanAarstabeller&tab&postfix);
-%start_timer(masterdata);
-
-%local i j var dsn1 dsn2 dsn3 ds_names;
-
-%LET tab=%UPCASE(&tab);
-%LET primtab=%UPCASE(&primtab);
-
-%IF %UPCASE(&test)=TRUE %THEN %LET in=WORK;
-%let endyr=%sysfunc(date(),year4.);
-%LET ds_names=;
-proc sql noprint;
-  select distinct memname into :dsn2 separated by ' '
-  from dictionary.tables
-  where libname=upcase("&in") and prxmatch("/^&tab.([^A-Za-z]|$)/",memname)>0 and upcase(memtype)=upcase("VIEW");
-
-  %IF &primtab eq %THEN %DO; /* ie enten kontakt eller forløb primær tabellerne */
-    %let varslut = %sysfunc(tranwrd(&var,start, slut));
-    proc sql noprint inobs=&sqlmax;
-    create table work.&dsn2 as 
-      select * from &in..&dsn2;
-      quit;
-    %DO yr=&startyr %to &endyr;
-      proc sql noprint inobs=&sqlmax;
-      create table &in..&dsn2._&yr as
-        select * 
-        %IF %varexist(work.&dsn2,start)=0 %THEN , datepart(&var) as start;
-        %IF %varexist(work.&dsn2,slut)=0 %THEN , datepart(&varslut) as slut; 
-        from work.&dsn2
-        where year(datepart(&var)) %IF &yr=&startyr %THEN between 1960 and &yr; %else = &yr;;
-    %END;
-    drop table work.&dsn2;
-    %IF &dropview=TRUE %THEN drop view &in..&dsn2;;
-  %END;
-  %IF &tab ne &primtab and &primtab ne %THEN %DO;
-    proc sql noprint;
-      select distinct memname into :dsn1 separated by ' '
-      from dictionary.tables
-      where libname=upcase("&in") and prxmatch("/^&primtab.([^A-Za-z]|$)/",memname)>0 and upcase(memtype)=upcase("DATA");
-      create table work.&dsn2 as 
-        select * from &in..&dsn2;
-	quit;
-        %DO yr=&startyr %to &endyr;
-          %let dsn1=%sysfunc(tranwrd(&dsn2,&tab,&primtab));
-          %let dsn3=substr(&dsn2,1,%length(&dsn2)-%length(&postfix))&postfix;
-          proc sql noprint inobs=&sqlmax;
-          create table &in..&dsn3._&yr as
-            select * 
-            from work.&dsn2 as a
-            where a.&var in (select &var from &in..&dsn1._&yr)
-            %if &where ne %then and &where;
-            ;
-        %END;
-        drop table work.&dsn2;
-        %IF &dropview=TRUE %THEN drop view &id..&dsn2;;
-  %END;
-  quit;
+%macro danaarstab(tab,var,primtab=,startyr=2018,lib=master,dropview=TRUE,postfix=,where=);
+	%start_log(&logdir,2_3-DanAarstabeller&tab&postfix);
+	%start_timer(masterdata);
+	
+	%local yr endyr varslut ds_names;
+	
+	%LET tab=%UPCASE(&tab);
+	%LET primtab=%UPCASE(&primtab);
+	
+	%IF %UPCASE(&test)=TRUE %THEN %LET lib=WORK;
+	%let endyr=%sysfunc(date(),year4.);
+	%LET ds_names=;
+	
+	%if not %sysfunc(exist(&lib..&tab)) and not %sysfunc(exist(&lib..&tab,"VIEW")) %then %put ERROR: the file &lib..&tab does not exist;
+	%else %do;
+	    %let varslut = %sysfunc(tranwrd(&var,start, slut));
+	    proc sql noprint inobs=&sqlmax;
+	    create table work.&tab as 
+		    select * from &lib..&tab;
+		    %DO yr=&startyr %to &endyr;
+				%if &primtab ne not %sysfunc(exist(&lib..&primtab._&yr)) %then %put ERROR: the file &lib..&primtab._&yr does not exist;
+				%else %do;
+				  create table &lib..&tab._&yr as
+			        select * 
+			        %IF &primtab eq and %varexist(work.&tab,start)=0 %THEN , datepart(&var) as start;
+			        %IF &primtab eq and %varexist(work.&tab,slut)=0 %THEN , datepart(&varslut) as slut; 
+			        from work.&tab a
+					where 
+					%IF &primtab eq %then %do;
+				        year(datepart(a.&var)) %IF &yr=&startyr %THEN between 1960 and &yr; %else = &yr;
+			    	%END;
+					%ELSE %do;
+				        a.&var in (select distinct &var from &lib..&primtab._&yr)
+					%END;
+					%if &where ne %then &where;
+			    	;
+				%end;
+			%end;
+	    	drop table work.&tab;
+	    	%IF &dropview=TRUE and %sysfunc(exist(&lib..&tab,"VIEW")) %THEN drop view &lib..&tab;;
+		quit;
+	%END;
   %END_TIMER(masterdata, text=Measure time for danaarstabeller);
   %end_log;
 %MEND;
