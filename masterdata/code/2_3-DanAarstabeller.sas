@@ -2,9 +2,11 @@
 	%start_log(&logdir,2_3-DanAarstabeller&tab&postfix);
 	%start_timer(masterdata);
 	
-	%local yr endyr varslut ds_names;
+	%local yr endyr tab2 ds_names;
 	
 	%LET tab=%UPCASE(&tab);
+	%let tab2=&tab;
+	%if %length(&tab2._xxxx&postfix)>32 %then %let tab2=%substr(&tab2,1,32-%length(_xxxx&postfix));
 	%LET primtab=%UPCASE(&primtab);
 	
 	%IF %UPCASE(&test)=TRUE %THEN %LET lib=WORK;
@@ -19,7 +21,7 @@
 		    %DO yr=&startyr %to &endyr;
 				%if &primtab ne not %sysfunc(exist(&lib..&primtab._&yr)) %then %put ERROR: the file &lib..&primtab._&yr does not exist;
 				%else %do;
-				  create table &lib..&tab._&yr as
+				  create table &lib..&tab2._&yr.&postfix as
 			        select * 
 			        from work.&tab a
 					where 
