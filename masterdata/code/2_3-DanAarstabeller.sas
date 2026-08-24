@@ -13,7 +13,6 @@
 	
 	%if not %sysfunc(exist(&lib..&tab)) and not %sysfunc(exist(&lib..&tab,"VIEW")) %then %put ERROR: the file &lib..&tab does not exist;
 	%else %do;
-	    %let varslut = %sysfunc(tranwrd(&var,start, slut));
 	    proc sql noprint inobs=&sqlmax;
 	    create table work.&tab as 
 		    select * from &lib..&tab;
@@ -22,12 +21,12 @@
 				%else %do;
 				  create table &lib..&tab._&yr as
 			        select * 
-			        %IF &primtab eq and %varexist(work.&tab,start)=0 %THEN , datepart(&var) as start;
-			        %IF &primtab eq and %varexist(work.&tab,slut)=0 %THEN , datepart(&varslut) as slut; 
 			        from work.&tab a
 					where 
 					%IF &primtab eq %then %do;
-				        year(datepart(a.&var)) %IF &yr=&startyr %THEN between 1960 and &yr; %else = &yr;
+				        %if %sysfunc(vartype(&var)) = D %then year(a.&var);
+						%if %sysfunc(vartype(&var)) = T %then year(datepart(a.&var));
+						%IF &yr=&startyr %THEN between 1960 and &yr; %else = &yr;
 			    	%END;
 					%ELSE %do;
 				        a.&var in (select distinct &var from &lib..&primtab._&yr)
@@ -58,4 +57,6 @@
 %danaarstab(lpr_a_resultater,      forloeb_id,primtab=lpr_a_forloeb,postfix=forl);
 %danaarstab(lpr_a_forloebsmarkoer, forloeb_id,primtab=lpr_a_forloeb);
 
+%danaarstab(lab_dm_forsker, samplingdate, startyr=2015);
+%danaarstab(indberetningmedpris, adm, startyr=2020);
 
