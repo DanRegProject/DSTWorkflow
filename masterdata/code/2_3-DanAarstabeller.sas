@@ -32,7 +32,7 @@
 					%ELSE %do;
 				        a.&var in (select distinct &var from &lib..&primtab._&yr)
 					%END;
-					%if &where ne %then &where;
+					%if &where ne %then and &where;
 			    	;
 				%end;
 			%end;
