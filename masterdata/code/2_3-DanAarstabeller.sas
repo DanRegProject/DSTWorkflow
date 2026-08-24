@@ -59,6 +59,6 @@
 %danaarstab(lpr_a_resultater,      forloeb_id,primtab=lpr_a_forloeb,postfix=forl);
 %danaarstab(lpr_a_forloebsmarkoer, forloeb_id,primtab=lpr_a_forloeb);
 
-%danaarstab(lab_dm_forsker, samplingdate, startyr=2015);
-%danaarstab(indberetningmedpris, adm, startyr=2020);
+%danaarstab(lab_dm_forsker, samplingdate, startyr=2008);
+%danaarstab(indberetningmedpris, adm, startyr=2018);
 
