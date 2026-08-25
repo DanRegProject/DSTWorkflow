@@ -16,18 +16,27 @@
 	%if not %sysfunc(exist(&lib..&tab)) and not %sysfunc(exist(&lib..&tab,"VIEW")) %then %put ERROR: the file &lib..&tab does not exist;
 	%else %do;
 	    proc sql noprint inobs=&sqlmax;
+		%if &primtab eq %then %do;
+			select upcase(informat), upcase(format) into :varinformat, :varformat
+			from dictionary.columns
+			where 	upcase(libname) = upcase("&lib") and
+			 		upcase(memname) = upcase("&tab") and
+			 		upcase(name) 	= upcase("&var");
+		%end;
 	    create table work.&tab as 
 		    select * from &lib..&tab;
 		    %DO yr=&startyr %to &endyr;
 				%if &primtab ne and not %sysfunc(exist(&lib..&primtab._&yr)) %then %put ERROR: the file &lib..&primtab._&yr does not exist;
+				%else %if &primtab eq and %index(&varinformat,DATE)=0 and %index(&varformat,DATE)=0 %then %put ERROR: the variable &var is not date or datetime;
 				%else %do;
 				  create table &lib..&tab2._&yr.&postfix as
 			        select * 
 			        from work.&tab a
 					where 
 					%IF &primtab eq %then %do;
-				        %if %sysfunc(vartype(&var)) = D %then year(a.&var);
-						%if %sysfunc(vartype(&var)) = T %then year(datepart(a.&var));
+						%if %index(&varinformat,DATETIME)>0 or %index(&varformat,DATETIME)>0 or 
+						    %index(&varinformat,DT)>0 or %index(&varformat,DT)>0 %then year(datepart(a.&var));
+						%else year(a.&var);	
 						%IF &yr=&startyr %THEN between 1960 and &yr; %else = &yr;
 			    	%END;
 					%ELSE %do;
