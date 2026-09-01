@@ -3,26 +3,31 @@ program define get_sas19, rclass
     version 19.0
 
     // Primary interface
-    // - masterdir: directory containing SAS files (master library)
     // - type: data type (DIAG, OPR, UBE, etc) - used to lookup HEAD globals
     // - sets: comma/space-separated indicator names or literal code prefixes
-    // - outdata: output .dta path
     //
     // Optional:
-    // - files: filename pattern or list (if omitted, the code will search masterdir using datasourceDef HEAD/source prefixes)
-    // - codevar, datevar, keyvar: override variable names (otherwise read from HEADstdget*)
+    // - indata: source population 
+    // - outdata: output population
+    // - outdir: directory for output .dta
     // - getvar: additional vars to import (comma-separated)
     // - fromyear/fromdate/todate: date window (fromyear default 1997)
+    // - masterdir: directory containing SAS files (master library)
+    // - files: filename pattern or list (if omitted, the code will search masterdir using datasourceDef HEAD/source prefixes)
+    // - codevar, datevar, keyvar: override variable names (otherwise read from HEADstdget*)
     // - case(lower|preserve|upper): passed to import sas (default lower)
-    syntax , MASTERDIR(string) TYPE(string) SETS(string) OUTDATA(string) ///
-            [ FILES(string) CODEVAR(string) DATEVAR(string) KEYVAR(string) ///
-              GETVAR(string) FROMYEAR(integer 1997) FROMDATE(string) TODATE(string) CASE(string lower) ]
+    syntax , TYPE(string) SETS(string) ///
+            [INDATA(string) OUTDATA(string) OUTDIR() GETVAR(string) FROMYEAR(integer 1997) FROMDATE(string) TODATE(string) ///
+             MASTERDIR(string) FILES(string) CODEVAR(string) DATEVAR(string) KEYVAR(string) ///
+             CASE(string lower) ]
 
     // normalize inputs
     local masterdir = subinstr("`masterdir'","""","",.)
+    local outdir = subinstr("`outdir'","""","",.)
     local type = ustrupper("`type'")
     local setspec = "`sets'"
     local outdata = "`outdata'"
+    local indata = "`outdata'"
     local filesopt = "`files'"
     local codevar_opt = lower("`codevar'")
     local datevar_opt = lower("`datevar'")
@@ -274,6 +279,7 @@ program define get_sas19, rclass
         local avail : colnames
 
         // find actual codevar in available vars (case has been normalized by caseopt)
+     /* --- determine actual code variable name (existing logic) --- */
         local actual_codevar ""
         if "`want_codevar'" != "" {
             foreach v of local avail {
@@ -283,15 +289,15 @@ program define get_sas19, rclass
                 }
             }
         }
-        if "`actual_codevar'" == "" {
-            // heuristics
+         if "`actual_codevar'" == "" {
             foreach cand in diag proc code procedure diagnose proc_code {
                 foreach v of local avail {
                     if lower("`v'") == "`cand'" {
                         local actual_codevar "`v'"
-                        exit
+                        break
                     }
                 }
+                if "`actual_codevar'" != "" break
             }
         }
         if "`actual_codevar'" == "" {
@@ -334,19 +340,72 @@ program define get_sas19, rclass
             }
             macro shift
         }
-        // ensure actual_codevar included
-        if "`actual_codevar'" != "" & strpos(" `namelist_final' "," `actual_codevar' ") == 0 local namelist_final "`namelist_final' `actual_codevar'"
-        if "`actual_datevar'" != "" & strpos(" `namelist_final' "," `actual_datevar' ") == 0 local namelist_final "`namelist_final' `actual_datevar'"
-
-        // build if expression
-        local ifexpr = "regexm(lower(`actual_codevar'),\"`code_pattern'\")"
-        if `have_date_filter' & "`actual_datevar'" != "" {
-            if "`fnum'" != "" & "`tnum'" != "" local ifexpr = "`ifexpr' & `actual_datevar' >= `fnum' & `actual_datevar' <= `tnum'"
-            else if "`fnum'" != "" local ifexpr = "`ifexpr' & `actual_datevar' >= `fnum'"
-            else if "`tnum'" != "" local ifexpr = "`ifexpr' & `actual_datevar' <= `tnum'"
+                /* --- determine actual code variable name (existing logic) --- */
+        local actual_codevar ""
+        if "`want_codevar'" != "" {
+            foreach v of local avail {
+                if lower("`v'") == lower("`want_codevar'") {
+                    local actual_codevar "`v'"
+                    break
+                }
+            }
+        }
+        if "`actual_codevar'" == "" {
+            foreach cand in diag proc code procedure diagnose proc_code {
+                foreach v of local avail {
+                    if lower("`v'") == "`cand'" {
+                        local actual_codevar "`v'"
+                        break
+                    }
+                }
+                if "`actual_codevar'" != "" break
+            }
+        }
+        if "`actual_codevar'" == "" {
+            di as err "get_sas19: no code variable found in `filepath' (pass codevar() to specify); skipping"
+            continue
         }
 
-        // Now perform filtered import using namelist and ifexpr
+        /* --- normalize and build code-prefix regex from `prefixes' --- */
+        local altlist ""
+        foreach p of local prefixes {
+            // remove whitespace and non-alphanumeric characters from prefix (keep letters+digits)
+            local pclean = ustrregexra("`p'", "[^A-Za-z0-9]", "")
+            if "`pclean'" == "" continue
+            local pclean = lower("`pclean'")
+            if "`altlist'" == "" local altlist "`pclean'"
+            else local altlist "`altlist'|`pclean'"
+        }
+        if "`altlist'" == "" {
+            di as err "get_sas19: no valid code prefixes after normalization; skipping file."
+            continue
+        }
+        local code_pattern = "^(`altlist')"   // anchored alternation, e.g. ^(a34|dd|b)
+
+        /* --- decide whether code variable is string or numeric and build code expression accordingly --- */
+        capture confirm string variable `actual_codevar'
+        if _rc == 0 {
+            // string variable: trim and lowercase before matching
+            local code_expr = "regexm(lower(trim(`actual_codevar')),\"`code_pattern'\")"
+        }
+        else {
+            // numeric variable: convert to string then lowercase before matching (string() is fine in expression)
+            // use string(`var') without a format; Stata's string() will convert numeric to a string
+            local code_expr = "regexm(lower(string(`actual_codevar')) ,\"`code_pattern'\")"
+        }
+
+        /* --- build date clause (unchanged) --- */
+        local date_clause = ""
+        if `have_date_filter' & "`actual_datevar'" != "" {
+            if "`fnum'" != "" & "`tnum'" != "" local date_clause = " & `actual_datevar' >= `fnum' & `actual_datevar' <= `tnum'"
+            else if "`fnum'" != "" local date_clause = " & `actual_datevar' >= `fnum'"
+            else if "`tnum'" != "" local date_clause = " & `actual_datevar' <= `tnum'"
+        }
+
+        /* --- final if expression --- */
+        local ifexpr = "`code_expr'`date_clause'"
+
+        /* --- use the if expression in import sas --- */
         di as txt "get_sas19: importing variables:`namelist_final' if `ifexpr' using `filepath' (case=`caseopt')"
         capture noisily import sas `namelist_final' if `ifexpr' using "`filepath'", case(`caseopt') clear
         if _rc {
