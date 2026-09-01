@@ -209,7 +209,11 @@ proc sql noprint;
                   %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));) b
             where a.name=b.name;
          %end;
-
+           select upcase(informat), upcase(format) into :datevarinformat, :datevarformat
+           from dictionary.columns
+            where upcase(libname)="MASTER" and memname="&locdsn1" and 
+            upcase(name)=upcase("&&&type.stdgetdatevar");
+            
          select distinct upcase(name) into :locgetvar1 separated by ', ' from dictionary.columns
             where upcase(libname)="MASTER" and memname="&locdsn1"
             %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));;
@@ -280,7 +284,11 @@ proc sql inobs=&sqlmax;
    %if %quote(&subset) ne  %then &subset;
 
    %if "&fromdate" ne "" and &&&type.stdgetdatevar ne %then %do;
-      %if &dlstcnt>0 or %quote(&subset) ne  %then and; &&&type.stdgetdatevar
+      %if &dlstcnt>0 or %quote(&subset) ne  %then and; 
+      %if %index(&datevarinformat,DATEIME)>0 or  %index(&datevarinformat,DT)>0 or
+          %index(&datevarformat,DATEIME)>0 or  %index(&datevarformat,DT)>0 %then
+      datepart(&&&type.stdgetdatevar);      
+      %else &&&type.stdgetdatevar;
          between &fromdate and &todate
    %end;
    %end;        
