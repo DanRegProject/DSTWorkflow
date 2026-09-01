@@ -209,10 +209,7 @@ proc sql noprint;
                   %IF &getvar ne %THEN and upcase(name) in (%quotelst(&getvar, delim=%str(, )));) b
             where a.name=b.name;
          %end;
-           select upcase(informat), upcase(format) into :datevarinformat, :datevarformat
-           from dictionary.columns
-            where upcase(libname)="MASTER" and memname="&locdsn1" and 
-            upcase(name)=upcase("&&&type.stdgetdatevar");
+           
             
          select distinct upcase(name) into :locgetvar1 separated by ', ' from dictionary.columns
             where upcase(libname)="MASTER" and memname="&locdsn1"
@@ -255,7 +252,12 @@ proc sql noprint inobs=&sqlmax;
    %end;
 quit;
 %end; /* firstrun */
-
+proc sql noprint;
+select upcase(informat), upcase(format) into :datevarinformat, :datevarformat
+           from dictionary.columns
+            where upcase(libname)="WORK" and memname in ("&locdsn1","&locdsn2","&locdsn3")
+            and 
+            upcase(name)=upcase("&&&type.stdgetdatevar");
 proc sql inobs=&sqlmax;
    create table &localoutdata as
       select distinct
