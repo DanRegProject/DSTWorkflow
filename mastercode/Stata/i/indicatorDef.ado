@@ -85,36 +85,15 @@ program define indicatorDef, rclass
         global `g_c' "`crit'"
     }
 
-    // Append to xtragettypes (global) if not already present
-    local curxt : global xtragettypes
-    if "`curxt'" == "" {
-        capture global xtragettypes
-        global xtragettypes "`type'"
-    }
-    else {
-        // split and test for presence
-        local found = 0
-        tokenize "`curxt'"
-        while "`1'" != "" {
-            if "`1'" == "`type'" local found = 1
-            macro shift
-        }
-        if `found' == 0 {
-            capture global xtragettypes
-            global xtragettypes "`curxt' `type'"
-        }
-    }
-
     // Verbose output
     if "`verbose'" == "TRUE" {
         di as txt "indicatorDef: registered indicator for type=`type' name=`name_in' (safe=`safe')"
-        di as txt "  $`g_codes'    = \"`=strtrim($`g_codes')'\""
         di as txt "  $`g_label'    = \"`=strtrim($`g_label')'\""
+        di as txt "  $`g_codes'    = \"`=strtrim($`g_codes')'\""
         if "`icd8'" != "" di as txt "  $`g_codes'_ICD8 = \"`=strtrim($`g_codes'_ICD8')'\""
         if "`w'" != "" di as txt "  $`g_codes'_W = \"`=strtrim($`g_codes'_W')'\""
         if "`wdays'" != "" di as txt "  $`g_codes'_D = \"`=strtrim($`g_codes'_D')'\""
         if "`crit'" != "" di as txt "  $`g_codes'_C = \"`=strtrim($`g_codes'_C')'\""
-        di as txt "  $xtragettypes = \"`xtragettypes'\""
     }
 
     // return globals created (for programmatic checks)
