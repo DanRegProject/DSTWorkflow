@@ -1,113 +1,85 @@
 /* definitions 2020 */
 
 /*alcorel - alcohol related diseases*/
-%let DIAGalcorel = e244 e529a f105 f106 f107 f108 f109 g312 g621 g721 i426 k292 k70 k852 k860 l278a o354 p043;
-%let DIAGlalcorel = "alcohol related diseases";
+%IndicatorDef(type=DIAG, name=alcorel, short_txt="alcohol related diseases", code=e244 e529a f105 f106 f107 f108 f109 g312 g621 g721 i426 k292 k70 k852 k860 l278a o354 p043);
 
 /*alco - alcohol abuse*/
-%let DIAGalco = f100 f101 f102 f103 f104 r780 t500a t51 x65 z714 z721 z358m10 z39310 z3932 z502 z714 z721;
-%let DIAGlalco = "alcohol abuse";
+%IndicatorDef(type=DIAG, name=alco, short_txt="alcohol abuse", code=f100 f101 f102 f103 f104 r780 t500a t51 x65 z714 z721 z358m10 z39310 z3932 z502 z714 z721);
 
 /*copd - chronic obstructive pulmonary disorder (kol)*/
-%let DIAGcopd = j44 alal21;
-%let DIAGlcopd = "chronic obstructive pulmonary disorder (kol)";
+%IndicatorDef(type=DIAG, name=copd, short_txt="chronic obstructive pulmonary disorder (kol)", code=j44 alal21);
 
 /*diablpr - diabetes mellitus*/
-%let DIAGdiablpr = e10 e11 e12 e13 e14 h360 o240 o241 o242 o243;
-%let DIAGldiablpr = "diabetes mellitus";
+%IndicatorDef(type=DIAG, name=diablpr, short_txt="diabetes mellitus", code=e10 e11 e12 e13 e14 h360 o240 o241 o242 o243);
 
 /*diabcomp - diabetes with chronic complications*/
-%let DIAGdiabcomp = e102 e103 e104 e105 e106 e107 e108 e112 e113 e114 e115 e116 e117 e118 h360;
-%let DIAGldiabcomp = "diabetes with chronic complications";
+%IndicatorDef(type=DIAG, name=diabcomp, short_txt="diabetes with chronic complications", code=e102 e103 e104 e105 e106 e107 e108 e112 e113 e114 e115 e116 e117 e118 h360);
 
 /*dvtall - deep venous thrombosis (inclusive)*/
-%let DIAGdvtall = i636 i676 i801 i802 i803 i808 i809 i819 i822 i823 i828 i829 o223 o229 o871 o879;
-%let DIAGldvtall = "deep venous thrombosis (inclusive)";
+%IndicatorDef(type=DIAG, name=dvtall, short_txt="deep venous thrombosis (inclusive)", code=i636 i676 i801 i802 i803 i808 i809 i819 i822 i823 i828 i829 o223 o229 o871 o879);
 
 /*dvtstr - deep venous thrombosis (exclusive)*/
-%let DIAGdvtstr = i801 i802 i803 i808 i809;
-%let DIAGldvtstr = "deep venous thrombosis (exclusive)";
+%IndicatorDef(type=DIAG, name=dvtstr, short_txt="deep venous thrombosis (exclusive)", code=i801 i802 i803 i808 i809);
 
 /*hf - heart failure (inclusive cardiomyopathies)*/
-%let DIAGhf = i110 i130 i132 i420 i50 i426 i427 i429;
-%let DIAGlhf = "heart failure (inclusive cardiomyopathies)";
+%IndicatorDef(type=DIAG, name=hf, short_txt="heart failure (inclusive cardiomyopathies)", code=i110 i130 i132 i420 i50 i426 i427 i429);
 
 /*hfstr - heart failure str version*/
-%let DIAGhfstr = i110 i130 i132 i420 i50;
-%let DIAGlhfstr = "heart failure str version";
+%IndicatorDef(type=DIAG, name=hfstr, short_txt="heart failure str version", code=i110 i130 i132 i420 i50);
 
 /*hyplpr - hypertension*/
-%let DIAGhyplpr = i10 i11 i12 i13 i15;
-%let DIAGlhyplpr = "hypertension";
+%IndicatorDef(type=DIAG, name=hyplpr, short_txt="hypertension", code=i10 i11 i12 i13 i15);
 
 /*ihd - ischemic heart disease*/
-%let DIAGihd = i20 i21 i23 i24 i25;
-%let DIAGlihd = "ischemic heart diseasen";
+%IndicatorDef(type=DIAG, name=ihd, short_txt="ischemic heart disease", code=i20 i21 i23 i24 i25);
 
 /*liver - clinically relevant liver disease*/
-%let DIAGliver = b150 b160 b162 b18 b190 i85 k700 k701 k702 k703 k704 k709 k71 k72 k73 k74 k760 k766;
-%let DIAGlliver = "clinically relevant liver disease";
+%IndicatorDef(type=DIAG, name=liver, short_txt="clinically relevant liver disease", code=b150 b160 b162 b18 b190 i85 k700 k701 k702 k703 k704 k709 k71 k72 k73 k74 k760 k766);
 
 /*miall - myocardial infarction*/
-%let DIAGmiall = i21 i23 i24;
-%let DIAGlmiall = "myocardial infarction";
+%IndicatorDef(type=DIAG, name=miall, short_txt="myocardial infarction", code=i21 i23 i24);
 
 /*mistr - myocardial infarction str version*/
-%let DIAGmistr = i21;
-%let DIAGlmistr = "myocardial infarction str version";
+%IndicatorDef(type=DIAG, name=mistr, short_txt="myocardial infarction str version", code=i21);
 
 /*mitralrheu - rheumatic mitral valve disease*/
-%let DIAGmitralrheu = i05 i080a i081a i083a;
-%let DIAGlmitralrheu = "rheumatic mitral valve disease";
+%IndicatorDef(type=DIAG, name=mitralrheu, short_txt="rheumatic mitral valve disease", code=i05 i080a i081a i083a);
 
 /*mitstenspec - mitral stenosis rheumatic and nonrheumatic*/
-%let DIAGmitstenspec = i050 i052 i342;
-%let DIAGlmitstenspec = "mitral stenosis rheumatic and nonrheumatic";
+%IndicatorDef(type=DIAG, name=mitstenspec, short_txt="mitral stenosis rheumatic and nonrheumatic", code=i050 i052 i342);
 
 /*obese25 - obesity (bmi = 25)*/
-%let DIAGobese25 =e65 e66;
-%let DIAGlobese25 = "obesity (bmi = 25)";
+%IndicatorDef(type=DIAG, name=obese25, short_txt="obesity (bmi = 25)", code=e65 e66);
 
 /*obese30 - obesity (bmi = 30)*/
-%let DIAGobese30 =e660b e660c e660d e660e e660f e660g e660h;
-%let DIAGlobese30 = "obesity (bmi = 30)";
+%IndicatorDef(type=DIAG, name=obese30, short_txt="obesity (bmi = 30)", code=e660b e660c e660d e660e e660f e660g e660h);
 
 /*obeseall - obesity (inklusiv foelger af overvaegt anden overvagt)*/
-%let DIAGobeseall = e65 e66 e67 e68;
-%let DIAGlobeseall = "obesity (inklusiv foelger af overvaegt anden overvaegt)";
+%IndicatorDef(type=DIAG, name=obeseall, short_txt="obesity (inklusiv foelger af overvaegt anden overvaegt)", code=e65 e66 e67 e68);
 
-/*padall dah peripheral arterial disease*/
-%let DIAGpadall = i70 i73 i74;
-%let DIAGlpadall = "peripheral arterial disease";
+/*padall - peripheral arterial disease*/
+%IndicatorDef(type=DIAG, name=padall, short_txt="peripheral arterial disease", code=i70 i73 i74);
 
 /*padstr - peripheral arterial ischemic disease*/
-%let DIAGpadstr = i702 i739a i739c i74;
-%let DIAGlpadstr = "peripheral arterial ischemic disease";
+%IndicatorDef(type=DIAG, name=padstr, short_txt="peripheral arterial ischemic disease", code=i702 i739a i739c i74);
 
 /*padembo - peripheral arterial thromboemboli for s2 in cha2ds2vasc*/
-%let DIAGpadembo = i74;
-%let DIAGlpadembo = "peripheral arterial thromboemboli for s2 in ch2ds2vasc";
+%IndicatorDef(type=DIAG, name=padembo, short_txt="peripheral arterial thromboemboli for s2 in cha2ds2vasc", code=i74);
 
 /*padvasc - peripheral vascular/ischemic disease and aortic plague for part of vasc in cha2ds2asc*/
-%let DIAGpadvasc = i700 i702 i708 i709 i739;
-%let lplpadvasc = "peripheral vascular/ischemic disease and aortic plague for part of vasc in cha2ds2vasc";
+%IndicatorDef(type=DIAG, name=padvasc, short_txt="peripheral vascular/ischemic disease and aortic plague for part of vasc in cha2ds2vasc", code=i700 i702 i708 i709 i739);
 
 /*pneu - pneumonia*/
-%let DIAGpneu = j12 j13 j14 j15 j16 j17 j18;
-%let DIAGlpneu = "pneumonia";
+%IndicatorDef(type=DIAG, name=pneu, short_txt="pneumonia", code=j12 j13 j14 j15 j16 j17 j18);
 
 /*renalchronic - chronic kidney disease*/
-%let DIAGrenalchronic = e102 e112 e142 i120 i131 i132 i150 i151 n03 n04;
-%let DIAGlrenalchronic = "chronic kidney disease";
+%IndicatorDef(type=DIAG, name=renalchronic, short_txt="chronic kidney disease", code=e102 e112 e142 i120 i131 i132 i150 i151 n03 n04);
 
 /*renal - renal disease*/
-%let DIAGrenal = i12 i13 n00 n01 n02 n03 n04 n05 n07 n11 n14 n18 n19 q61 n17;
-%let DIAGlrenal = "renal disease";
+%IndicatorDef(type=DIAG, name=renal, short_txt="renal disease", code=i12 i13 n00 n01 n02 n03 n04 n05 n07 n11 n14 n18 n19 q61 n17);
 
 /*vteall - venous thromboembolism (inclusive)*/
-%let DIAGvteall = h348e h348f i26 i636 i676 i801 i802 i803 i808 i809 i81 i822 i823 i828 i829 o223 o225 o229 o871 o879 o873 o882 t917c t817d;
-%let DIAGlvteall = "venous thromboembolism (inclusive)";
+%IndicatorDef(type=DIAG, name=vteall, short_txt="venous thromboembolism (inclusive)", code=h348e h348f i26 i636 i676 i801 i802 i803 i808 i809 i81 i822 i823 i828 i829 o223 o225 o229 o871 o879 o873 o882 t917c t817d);
 
 /*vtestr - venous thromboembolism (exclusive)*/
-%let DIAGvtestr = i26 i801 i802 i803 i808 i809;
-%let DIAGlvtestr = "venous thromboembolism (exclusive)";
+%IndicatorDef(type=DIAG, name=vtestr, short_txt="venous thromboembolism (exclusive)", code=i26 i801 i802 i803 i808 i809);
