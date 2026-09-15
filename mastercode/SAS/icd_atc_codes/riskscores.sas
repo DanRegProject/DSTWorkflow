@@ -202,7 +202,7 @@
               crit=((HypertensionDiag&MCSDdate>0) + (HypertensionMedi&MCSDdate>0))>0);
 /*IGNORE THE WARNING. Placeholder used in multicoscores.sas*/
 
-%IndicatorDef(ATC, hasbled1, "Drugs", &ATCAspirin &ATCclopi &ATCnsaid, w=1, wdays=180);
+%IndicatorDef(LMDB, hasbled1, "Drugs", &ATCAspirin &ATCclopi &ATCnsaid, w=1, wdays=180);
 
 
 /* CHA2DS2-VASc stroke risk score */
@@ -229,26 +229,26 @@
 
 
 /* Heart failure, used in CHA2DS2-VASc */
-%IndicatorDef(ATC, HeartFailMedi1, &ATCcloop, &ATCloop, w=1);
-%IndicatorDef(ATC, HeartFailMedi2, &ATCLRenin, &ATCRenin, w=1);
+%IndicatorDef(LMDB, HeartFailMedi1, &ATCcloop, &ATCloop, w=1);
+%IndicatorDef(LMDB, HeartFailMedi2, &ATCLRenin, &ATCRenin, w=1);
 %IndicatorDef(DIAG, HeartFailDiag1, &LPRHFStr, &LPRHFStr, icd8=&LPRHFStr_ICD8, w=1);
 
 
 /* Diabetes, used in CHA2DS2-VASc */
-%IndicatorDef(ATC, DiabetesMedi1, &ATCDiabetesATC, &ATCDiabetesATC, w=1);
+%IndicatorDef(LMDB, DiabetesMedi1, &ATCDiabetesATC, &ATCDiabetesATC, w=1);
 %IndicatorDef(DIAG, DiabetesDiag1, &LPRDiabLPR, &LPRDiabLPR, icd8=&LPRDiabLPR_ICD8, w=1);
 
 
 /* Hypertension, used in CHA2DS2VASC and HAS-BLED */
-%IndicatorDef(ATC, HypertensionMedi1, &ATCAlfa, &ATCAlfa, w=1);
-%IndicatorDef(ATC, HypertensionMedi2, &ATCLNonloop, &ATCNonloop, w=1);
-%IndicatorDef(ATC, HypertensionMedi3, &ATCLVaso, &ATCVaso, w=1);
-%IndicatorDef(ATC, HypertensionMedi4, &ATCLBeta, &ATCBeta, w=1);
-%IndicatorDef(ATC, HypertensionMedi5, &ATCLCalcium, &ATCCalcium, w=1);
-%IndicatorDef(ATC, HypertensionMedi6, &ATCLRenin, &ATCRenin, w=1);
+%IndicatorDef(LMDB, HypertensionMedi1, &ATCAlfa, &ATCAlfa, w=1);
+%IndicatorDef(LMDB, HypertensionMedi2, &ATCLNonloop, &ATCNonloop, w=1);
+%IndicatorDef(LMDB, HypertensionMedi3, &ATCLVaso, &ATCVaso, w=1);
+%IndicatorDef(LMDB, HypertensionMedi4, &ATCLBeta, &ATCBeta, w=1);
+%IndicatorDef(LMDB, HypertensionMedi5, &ATCLCalcium, &ATCCalcium, w=1);
+%IndicatorDef(LMDB, HypertensionMedi6, &ATCLRenin, &ATCRenin, w=1);
 %IndicatorDef(DIAG, HypertensionDiag1, &LPRHylLPR, &LPRHylLPR, icd8=&LPRHylLPR_ICD8, w=1);
 
 
 /* Hypertension combination drugs, used in CHA2DS2VASC and HAS-BLED */
-%IndicatorDef(ATC, CombHypertensionMedi1, "Combination drugs Hypertension",
+%IndicatorDef(LMDB, CombHypertensionMedi1, "Combination drugs Hypertension",
               C09BB04 C09DA C09DB C09CX01 C09DX04 C07B, w=1);
