@@ -195,15 +195,22 @@
               icd8=&LPRGIbleed_ICD8 &LPRICbleed_ICD8 &LPRIMbleed_ICD8 &LPRgenbleed_ICD8 &LPRocbleed_ICD8, w=1);
 %IndicatorDef(DIAG, hasbled5, "Alcohol", &LPRAlco, icd8=&LPRAlco_ICD8, w=1, wdays=180);
 
+%let DIAGhasbledN         = 5;
+
 %IndicatorDef(CPR, hasbled1, "Age>=65", empty, w=1,
               crit=((%MCSDate-birthdate)/365)>=65); /*IGNORE THE WARNING. Placeholder used in multicoscores.sas*/
+
+%let CPRhasbledN         = 1;
 
 %IndicatorDef(OTH, hasbled1, "Hypertension (diagnosis or medicated (2+ drugs))", empty, w=1,
               crit=((HypertensionDiag&MCSDdate>0) + (HypertensionMedi&MCSDdate>0))>0);
 /*IGNORE THE WARNING. Placeholder used in multicoscores.sas*/
 
+%let OTHhasbledN         = 1;
+
 %IndicatorDef(LMDB, hasbled1, "Drugs", &ATCAspirin &ATCclopi &ATCnsaid, w=1, wdays=180);
 
+%let LMDBhasbledN         = 1;
 
 /* CHA2DS2-VASc stroke risk score */
 
@@ -211,11 +218,16 @@
               icd8= &LPRIStroke_ICD8 &LPRTIA_ICD8 &LPRSE_ICD8, w=2);
 %IndicatorDef(DIAG, cha2ds2vasc2, "Vascular disease (MI or PAD3)", &LPRMI &LPRPAD3,
               icd8= &LPRMI_ICD8 &LPRPAD3_ICD8, w=1);
+
+%let DIAGcha2ds2vascN         = 2;
+
 %IndicatorDef(CPR, cha2ds2vasc1, "Age>=65", empty, w=1,
               crit=((%MCSDate-birthdate)/365)>=65); /*IGNORE THE WARNING. Placeholder used in multicoscores.sas*/
 %IndicatorDef(CPR, cha2ds2vasc2, "Age>=75", empty, w=1,
               crit=((%MCSDate-birthdate)/365)>=75); /*IGNORE THE WARNING. Placeholder used in multicoscores.sas*/
 %IndicatorDef(CPR, cha2ds2vasc3, "Female sex", empty, w=1, crit=(sex=1));
+
+%let CPRcha2ds2vascN         = 3;
 
 %IndicatorDef(OTH, cha2ds2vasc1, "Heart failure (diagnosis or medicated (2+ drugs))", empty, w=1,
               crit=((HeartFailDiag&MCSDdate>0) + (HeartFailMedi&MCSDdate>0))>0);
@@ -227,17 +239,26 @@
               crit=((DiabetesDiag&MCSDdate>0) + (DiabetesMedi&MCSDdate>0))>0);
 /*IGNORE THE WARNING. Placeholder used in multicoscores.sas*/
 
+%let OTHcha2ds2vascN         = 3;
 
 /* Heart failure, used in CHA2DS2-VASc */
 %IndicatorDef(LMDB, HeartFailMedi1, &ATCcloop, &ATCloop, w=1);
 %IndicatorDef(LMDB, HeartFailMedi2, &ATCLRenin, &ATCRenin, w=1);
+
+%let LMDBHeartFailMediN         = 2;
+
 %IndicatorDef(DIAG, HeartFailDiag1, &LPRHFStr, &LPRHFStr, icd8=&LPRHFStr_ICD8, w=1);
 
+%let LMDBHeartFailMediN         = 1;
 
 /* Diabetes, used in CHA2DS2-VASc */
 %IndicatorDef(LMDB, DiabetesMedi1, &ATCDiabetesATC, &ATCDiabetesATC, w=1);
+
+%let LMDBDiabetesMediN         = 1;
+
 %IndicatorDef(DIAG, DiabetesDiag1, &LPRDiabLPR, &LPRDiabLPR, icd8=&LPRDiabLPR_ICD8, w=1);
 
+%let DIAGDiabetesDiagN         = 1;
 
 /* Hypertension, used in CHA2DS2VASC and HAS-BLED */
 %IndicatorDef(LMDB, HypertensionMedi1, &ATCAlfa, &ATCAlfa, w=1);
@@ -246,9 +267,16 @@
 %IndicatorDef(LMDB, HypertensionMedi4, &ATCLBeta, &ATCBeta, w=1);
 %IndicatorDef(LMDB, HypertensionMedi5, &ATCLCalcium, &ATCCalcium, w=1);
 %IndicatorDef(LMDB, HypertensionMedi6, &ATCLRenin, &ATCRenin, w=1);
+
+%let LMDBHypertensionMediN         = 6;
+
 %IndicatorDef(DIAG, HypertensionDiag1, &LPRHylLPR, &LPRHylLPR, icd8=&LPRHylLPR_ICD8, w=1);
 
+%let DIAGHypertensionDiagN         = 1;
 
 /* Hypertension combination drugs, used in CHA2DS2VASC and HAS-BLED */
 %IndicatorDef(LMDB, CombHypertensionMedi1, "Combination drugs Hypertension",
               C09BB04 C09DA C09DB C09CX01 C09DX04 C07B, w=1);
+
+%let LMDBCombHypertensionMediN         = 1;
+
