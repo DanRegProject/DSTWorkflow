@@ -5,142 +5,92 @@
 
 /* A */
 /* ace - ACE-inhibitor */
-%global LMDBACE LMDBLACE;
-%let LMDBACE         = C09A;
-%let LMDBLACE        = "ACE-inhibitors";
+%IndicatorDef(LMDB, ace, "ACE-inhibitors", C09A);
 
 /* Aldo */
-%global LMDBAldo LMDBLAldo;
-%let LMDBAldo         = C03DA;
-%let LMDBLAldo        = "Aldosterone antagonists";
+%IndicatorDef(LMDB, aldo, "Aldosterone antagonists", C03DA);
 
 /* ALFA */
-%global LMDBalfa LMDBLalfa;
-%let LMDBalfa         = C02A C02B C02C;
-%let LMDBLalfa        = "Alfa adrenic block";
+%IndicatorDef(LMDB, alfa, "Alfa adrenic block", C02A C02B C02C);
 
 /* Amio */
-%global LMDBAmio LMDBLAmio;
-%let LMDBAmio         = C01BD01;
-%let LMDBLAmio        = "Amiodarone";
+%IndicatorDef(LMDB, amio, "Amiodarone", C01BD01);
 
 /* Antiand - Antiandrogener */
-%global LMDBantiand LMDBLantiand;
-%let LMDBantiand      = G03HB;
-%let LMDBLantiand     = "Antiandrogener";
+%IndicatorDef(LMDB, antiand, "Antiandrogener", G03HB);
 
-/*Antidem - Anti-dementia medication */
-%ICD_LMDBdefines(LMDB, antidem, "Antiandrogener", N06D);
+/* Antidem - Anti-dementia medication */
+%IndicatorDef(LMDB, antidem, "Anti-dementia medication", N06D);
 
 /* Antithy */
-%global LMDBAntithy LMDBLAntithy;
-%let LMDBAntiThy      = H03B;
-%let LMDBLAntiThy     = "Antithyroids";
+%IndicatorDef(LMDB, antithy, "Antithyroids", H03B);
 
 /* Apixa */
-%global LMDBApixa LMDBLApixa;
-%let LMDBApixa        = B01AF02;
-%let LMDBLApixa       = "Apixaban";
+%IndicatorDef(LMDB, apixa, "Apixaban", B01AF02);
 
 /* arb - Angiotension II receptor blockers/antagonists */
-%global LMDBARB LMDBLARB;
-%let LMDBARB         = C09C;
-%let LMDBLARB        = "Angiotension II receptor blockers/antagonists";
+%IndicatorDef(LMDB, arb, "Angiotension II receptor blockers/antagonists", C09C);
 
 /* Aroinhib */
-%global LMDBAroinhib LMDBLAroinhib;
-%let LMDBAroInhib     = L02BG;
-%let LMDBLAroInhib    = "Aromatase inhibitors";
+%IndicatorDef(LMDB, aroinhib, "Aromatase inhibitors", L02BG);
 
 /* Aspirin */
-%global LMDBAspirin LMDBLAspirin;
-%let LMDBaspirin      = B01AC06;
-%let LMDBLaspirin     = "Aspirin";
+%IndicatorDef(LMDB, aspirin, "Aspirin", B01AC06);
 
 
 /* B */
 /* Benzo */
-%global LMDBBenzo LMDBLBenzo;
-%let LMDBBenzo        = N03AE N05BA N05CD N05CF;
-%let LMDBLBenzo       = "Benzodiazaepines";
+%IndicatorDef(LMDB, benzo, "Benzodiazepines", N03AE N05BA N05CD N05CF);
 
 /* Beta */
-%global LMDBBeta LMDBLBeta;
-%let LMDBbeta         = C07;
-%let LMDBLbeta        = "Beta blocker";
+%IndicatorDef(LMDB, beta, "Beta blocker", C07);
 
 /* Bloodlow - Blood glucose lowering drugs, excluding insulins */
-%global LMDBbloodlow LMDBLbloodlow;
-%let LMDBbloodlow      = A10B;
-%let LMDBLbloodlow     = "Blood glucose lowering drugs, excluding insulins";
+%IndicatorDef(LMDB, bloodlow, "Blood glucose lowering drugs, excluding insulins", A10B);
 
 /* C */
 /* Calcium */
-%global LMDBCalcium LMDBLCalcium;
-%let LMDBcalcium      = C07F C08 C09BB C09DB;
-%let LMDBLcalcium     = "Calcium Channel blocker";
+%IndicatorDef(LMDB, calcium, "Calcium Channel blocker", C07F C08 C09BB C09DB);
 
 /* Carba */
-%global LMDBCarba LMDBLCarba;
-%let LMDBcarba        = N03AF01;
-%let LMDBLcarba       = "Carbamizipine";
+%IndicatorDef(LMDB, carba, "Carbamazepine", N03AF01);
 
 /* Clarit */
-%global LMDBClarit LMDBLClarit;
-%let LMDBClarit       = J01FA09;
-%let LMDBLClarit      = "Clarithromycin";
+%IndicatorDef(LMDB, clarit, "Clarithromycin", J01FA09);
 
 /* clomi - Clomifen */
-%global LMDBclomi LMDBLclomi;
-%let LMDBclomi        = G03GB02;
-%let LMDBLclomi       = "Clomifen";
+%IndicatorDef(LMDB, clomi, "Clomifen", G03GB02);
 
 /* Clopi */
-%global LMDBClopi LMDBLClopi;
-%let LMDBClopi        = B01AC04;
-%let LMDBLClopi       = "Clopidogrel";
+%IndicatorDef(LMDB, clopi, "Clopidogrel", B01AC04);
 
 /* Coumarin */
-%global LMDBCoumarin LMDBLCoumarin;
-%let LMDBCoumarin     = B01AA;
-%let LMDBLCoumarin    = "Coumarin derivatives (warfarin & phenprocoumon)";
+%IndicatorDef(LMDB, coumarin, "Coumarin derivatives (warfarin & phenprocoumon)", B01AA);
 
 /* Cyclo */
-%global LMDBCyclo LMDBLCyclo;
-%let LMDBcyclo        = L04AD01;
-%let LMDBLcyclo       = "Cyclosporine";
+%IndicatorDef(LMDB, cyclo, "Cyclosporine", L04AD01);
 
 
 /* D */
 /* Dbgtran */
-%global LMDBDbgtran LMDBLDbgtran;
-%let LMDBdbgtran      = B01AE07;
-%let LMDBLdbgtran     = "Dabigatran";
+%IndicatorDef(LMDB, dbgtran, "Dabigatran", B01AE07);
 
 /* DiabLMDB - Insuliner og Metformin */
-%global LMDBDiabLMDB LMDBLDiabLMDB;
-%let LMDBdiabatc      = A10;
-%let LMDBLdiabatc     = "Diabetes Mellitus";
+%IndicatorDef(LMDB, diabatc, "Diabetes Mellitus", A10);
 
 /* Digoxin */
-%global LMDBDigoxin LMDBLDigoxin;
-%let LMDBDigoxin      = C01AA05;
-%let LMDBLDigoxin     = "Digoxin";
+%IndicatorDef(LMDB, digoxin, "Digoxin", C01AA05);
 
 /* Donep - Donepzil */
 %IndicatorDef(LMDB, donep, "Donepezil", N06DA02);
 
 /* Drone */
-%global LMDBDrone LMDBLDrone;
-%let LMDBDrone        = C01BD07;
-%let LMDBLDrone       = "Dronedarone";
+%IndicatorDef(LMDB, drone, "Dronedarone", C01BD07);
 
 
 /* E */
 /* edoxa */
-%global LMDBedoxa LMDBLedoxa;
-%let LMDBedoxa        = B01AF03;
-%let LMDBLedoxa       = "Edoxaban";
+%IndicatorDef(LMDB, edoxa, "Edoxaban", B01AF03);
 
 
 /* F */
@@ -151,9 +101,7 @@
 %IndicatorDef(LMDB, fluco, "Fluconazol", J02AC01);
 
 /* Fonda */
-%global LMDBFonda LMDBLFonda;
-%let LMDBFonda        = B01AX05;
-%let LMDBLFonda       = "Fondaparinux";
+%IndicatorDef(LMDB, fonda, "Fondaparinux", B01AX05);
 
 
 /* G */
@@ -161,71 +109,47 @@
 %IndicatorDef(LMDB, galant, "Galantamin", N06DA04);
 
 /* GP */
-%global LMDBGP LMDBLGP;
-%let LMDBGP           = B01AC16;
-%let LMDBLGP          = "GPIIb/IIIa antagonists (eptifibatide)";
+%IndicatorDef(LMDB, gp, "GPIIb/IIIa antagonists (eptifibatide)", B01AC16);
 
 
 /* H  */
 /* H2 */
-%global LMDBH2 LMDBLH2;
-%let LMDBH2           = A02BA;
-%let LMDBLH2          = "H2-receptor antagonistis";
+%IndicatorDef(LMDB, h2, "H2-receptor antagonists", A02BA);
 
 /* heparins */
-%global LMDBheparins LMDBLheparins;
-%let LMDBHeparins     = B01AB;
-%let LMDBLHeparins    = "Low molecular weight heparins";
+%IndicatorDef(LMDB, heparins, "Low molecular weight heparins", B01AB);
 
-/* HFatc - Congestive heart failure - HFatc */
-%global LMDBHFatc LMDBLHFatc;
-%let LMDBHFLMDB        = C03C;
-%let LMDBLHFLMDB       = "Congestive heart failure";
+/* HFatc - Congestive heart failure */
+%IndicatorDef(LMDB, hfatc, "Congestive heart failure", C03C);
 
-/* hypLMDB removed */
-
-/* Hivprot - HIV_proteasehæmmere */
+/* Hivprot - HIV_protease inhibitors */
 %IndicatorDef(LMDB, hivprot, "HIV-protease inhibitors", J05AE10 J05AE08 J05AR14 J05AR15);
 
-/* HormCnt - Hormonal contraceptives   */
-%global LMDBHormCnt LMDBLHormCnt;
-%let LMDBHormCnt        = G03A;
-%let LMDBLHormCnt       = "Hormonal contraceptives";
+/* HormCnt - Hormonal contraceptives */
+%IndicatorDef(LMDB, hormcnt, "Hormonal contraceptives", G03A);
 
 /* HRT - Hormone replacement therapy */
-%global LMDBHRT LMDBLHRT;
-%let LMDBHRT        = G03C G03F;
-%let LMDBLHRT       = "Hormone replacement therapy";
+%IndicatorDef(LMDB, hrt, "Hormone replacement therapy", G03C G03F);
 
 
 /* I */
-/* Insulin - Insulins and analogues*/
-%global LMDBinsulin LMDBLinsulin;
-%let LMDBinsulin      = A10A;
-%let LMDBLinsulin     = "Insulin and analogues";
+/* Insulin - Insulins and analogues */
+%IndicatorDef(LMDB, insulin, "Insulin and analogues", A10A);
 
 /* Itracon */
-%global LMDBItracon LMDBLItracon;
-%let LMDBItracon      = J02AC02;
-%let LMDBLItracon     = "Itraconazole";
+%IndicatorDef(LMDB, itracon, "Itraconazole", J02AC02);
 
 /* Ivabrad */
-%global LMDBIvabrad LMDBLIvabrad;
-%let LMDBIvabrad      = C01EB17;
-%let LMDBLIvabrad     = "Ivabradin";
+%IndicatorDef(LMDB, ivabrad, "Ivabradin", C01EB17);
 
 
 /* K */
 /* keto */
-%global LMDBketo LMDBLketo;
-%let LMDBKeto         = J02AB02;
-%let LMDBLKeto        = "Systemic ketoconazole";
+%IndicatorDef(LMDB, keto, "Systemic ketoconazole", J02AB02);
 
 /* L */
 /* Loop */
-%global LMDBLoop LMDBLLoop;
-%let LMDBLoop         = C03C C03EB;
-%let LMDBLLoop        = "Loop diuretics";
+%IndicatorDef(LMDB, loop, "Loop diuretics", C03C C03EB);
 
 /* M */
 /* Mecil - Mecillinam */
@@ -235,9 +159,7 @@
 %IndicatorDef(LMDB, mema, "Memantin", N06DX01);
 
 /* metform - Metformin */
-%global LMDBmetform LMDBLmetform;
-%let LMDBmetform      = A10BA02;
-%let LMDBLmetform     = "Metformin";
+%IndicatorDef(LMDB, metform, "Metformin", A10BA02);
 
 /* N */
 
@@ -245,60 +167,42 @@
 %IndicatorDef(LMDB, nitro, "Nitrofurantoin", J01XE01);
 
 /* Nonloop */
-%global LMDBNonloop LMDBLNonloop;
-%let LMDBNonLoop      = C02DA C02L C03A C03B C03D C03EA C03X C07C C07D C08G C09BA C09DA C09XA52;
-%let LMDBLNonLoop     = "Non-loop diuretics";
+%IndicatorDef(LMDB, nonloop, "Non-loop diuretics", C02DA C02L C03A C03B C03D C03EA C03X C07C C07D C08G C09BA C09DA C09XA52);
 
 /* NSAID */
-%global LMDBNSAID LMDBLNSAID;
-%let LMDBNSAID        = M01AA M01AB M01AC M01AE M01AG M01AH M01AX01 ;
-%let LMDBLNSAID       = "NSAIDs";
+%IndicatorDef(LMDB, nsaid, "NSAIDs", M01AA M01AB M01AC M01AE M01AG M01AH M01AX01);
 
 
 /* O */
 /* OtherDiab */
-%global LMDBOtherDiab LMDBLOtherDiab;
-%let LMDBOtherDiab    = A10X;
-%let LMDBLOtherDiab   = "Other drugs used in diabetes";
+%IndicatorDef(LMDB, otherdiab, "Other drugs used in diabetes", A10X);
 
 
 /* P */
 /* Persantin */
-%global LMDBPersantin LMDBLPersantin;
-%let LMDBPersantin    = B01AC07;
-%let LMDBLPersantin   = "Persantin";
+%IndicatorDef(LMDB, persantin, "Persantin", B01AC07);
 
 /* Phen */
-%global LMDBPhen LMDBLPhen;
-%let LMDBPhen         = B01AA04;
-%let LMDBLPhen        = "Phenprocoumon";
+%IndicatorDef(LMDB, phen, "Phenprocoumon", B01AA04);
 
 /* prasu - Prasugrel */
 %IndicatorDef(LMDB, prasu, "Prasugrel", B01AC22);
 
 /* Proton */
-%global LMDBProton LMDBLProton;
-%let LMDBProton       = A02BC;
-%let LMDBLProton      = "Proton-pump inhibitors";
+%IndicatorDef(LMDB, proton, "Proton-pump inhibitors", A02BC);
 
 
 /* Q */
 /* Quin */
-%global LMDBQuin LMDBLQuin;
-%let LMDBQuin         = C01BA01;
-%let LMDBLQuin        = "Quinidine";
+%IndicatorDef(LMDB, quin, "Quinidine", C01BA01);
 
 
 /* R */
 /* Renin */
-%global LMDBRenin LMDBLRenin;
-%let LMDBRenin        = C09;
-%let LMDBLRenin       = "Renin-angiotensin inhibitor (ARB or ACE inhibitor)";
+%IndicatorDef(LMDB, renin, "Renin-angiotensin inhibitor (ARB or ACE inhibitor)", C09);
 
-/* riva -  Rivarox */
-%global LMDBRiva LMDBLRiva;
-%let LMDBRiva         = B01AF01;
-%let LMDBLRiva        = "Rivaroxaban";
+/* riva - Rivaroxaban */
+%IndicatorDef(LMDB, riva, "Rivaroxaban", B01AF01);
 
 /* rivast - Rivastigmin */
 %IndicatorDef(LMDB, rivast, "Rivastigmin", N06DA03);
@@ -308,72 +212,49 @@
 %IndicatorDef(LMDB, sota, "Sotalol", C07AA07);
 
 /* SSRI */
-%global LMDBSSRI LMDBLSSRI;
-%let LMDBSSRI         = N06AB;
-%let LMDBLSSRI        = "Selective serotonin reuptake inhibitors";
+%IndicatorDef(LMDB, ssri, "Selective serotonin reuptake inhibitors", N06AB);
 
 /* Statins */
-%global LMDBStatins LMDBLStatins;
-%let LMDBStatins      = C10;
-%let LMDBLStatins     = "Statins";
+%IndicatorDef(LMDB, statins, "Statins", C10);
 
 /* sulfa - Sulfamethiozole */
 %IndicatorDef(LMDB, sulfa, "Sulfamethiozole", J01EB02);
 
-
 /* Sulfin */
-%global LMDBSulfin LMDBLSulfin;
-%let LMDBSulfin       = M04;
-%let LMDBLSulfin      = "Sulfinpyrazone";
+%IndicatorDef(LMDB, sulfin, "Sulfinpyrazone", M04);
 
 /* Syscort */
-%global LMDBSyscort LMDBLSyscort;
-%let LMDBSysCort      = H02;
-%let LMDBLSysCort     = "Systemic corticosteroids";
+%IndicatorDef(LMDB, syscort, "Systemic corticosteroids", H02);
 
 
 /* T */
 /* Tacrol */
-%global LMDBTacrol LMDBLTacrol;
-%let LMDBTacrol       = L04AD02;
-%let LMDBLTacrol      = "Tacrolimus";
+%IndicatorDef(LMDB, tacrol, "Tacrolimus", L04AD02);
 
 /* TAThaLe - Tamoxifen Thalidomide Lenalidomide */
-%global LMDBTAThaLe LMDBLTAThaLe;
-%let LMDBTAThaLe        = L02BA01 L04AX04 L04AX02;
-%let LMDBLTAThaLe       = "Tamoxifen Thalidomide Lenalidomide";
+%IndicatorDef(LMDB, tathale, "Tamoxifen Thalidomide Lenalidomide", L02BA01 L04AX04 L04AX02);
 
 /* Thiazol */
-%global LMDBThiazol LMDBLThiazol;
-%let LMDBThiazol      = A10BG;
-%let LMDBLThiazol     = "Thiazolidinediones";
+%IndicatorDef(LMDB, thiazol, "Thiazolidinediones", A10BG);
 
 /* Thien */
-%global LMDBThien LMDBLThien;
-%let LMDBThien        = B01AC04 B01AC24 B01AC22; /*15/5/17 - tilføjet B01AC24 og B01AC22 (af Line)*/
-%let LMDBLThien       = "Thienopyridines (clopidogel, tricagrelor, prasugrel";
+%IndicatorDef(LMDB, thien, "Thienopyridines (clopidogel, tricagrelor, prasugrel)", B01AC04 B01AC24 B01AC22);
 
 /* Tica - Ticagrelor */
 %IndicatorDef(LMDB, tica, "Ticagrelor", B01AC24);
 
 /* TMP - Trimethoprim */
-%IndicatorDef(LMDB, tmp, "Trimetroprim", J01EA01);
+%IndicatorDef(LMDB, tmp, "Trimethoprim", J01EA01);
 
 
 /* V */
 /* Vaso */
-%global LMDBVaso LMDBLVaso;
-%let LMDBVaso         = C02DB C02DD C02DG C04 C05;
-%let LMDBLVaso        = "Vasodilator";
+%IndicatorDef(LMDB, vaso, "Vasodilator", C02DB C02DD C02DG C04 C05);
 
 /* Vera */
-%global LMDBVera LMDBLVera;
-%let LMDBVera         = C08DA01;
-%let LMDBLVera        = "Verapamil";
+%IndicatorDef(LMDB, vera, "Verapamil", C08DA01);
 
 
 /* W */
 /* Warfarin */
-%global LMDBWarfarin LMDBLWarfarin;
-%let LMDBWarfarin     = B01AA03;
-%let LMDBLWarfarin    = "Warfarin";
+%IndicatorDef(LMDB, warfarin, "Warfarin", B01AA03);
