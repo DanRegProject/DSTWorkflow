@@ -6,86 +6,57 @@ $Id: OPRkoder.sas 269 2021-01-28 09:52:52Z fflb6683 $
 */
 /* Operation codes, use OPR and OPRL prefix', Official codes has prefix K which is omitted */
 /* 26/6-2017 removing opr at the end (equal to version on SDS) */
+
 /* A */
 /* all - all operations */
-%global OPRAll OPRLAll;
-%let OPRAll        = KA KB KF KG KH KJ KK KL KM KN KP;
-%let OPRLAll       = "All operations";
+%IndicatorDef(OPR, All, "All operations", KA KB KF KG KH KJ KK KL KM KN KP);
 
 /* Arrhyo - heart arrhythm operations */
-%global OPRArrhyo OPRLArrhyo;
-%let OPRArrhyo      = KFP;
-%let OPRLArrhyo     = "heart arrhythm operations";
+%IndicatorDef(OPR, Arrhyo, "heart arrhythm operations", KFP);
 
 /* Arrhyt - hjerte rytme operationer */
-%global OPRArrhyt OPRLArrhyt;
-%let OPRArrhyt      = KFPA KFPB KFPD KFPW;
-%let OPRLArrhyt     = "Hjerte rytme operationer";
+%IndicatorDef(OPR, Arrhyt, "Hjerte rytme operationer", KFPA KFPB KFPD KFPW);
 
 /* B */
 /* C */
 /* cabg - Coronary artery bypass graft */
-%global OPRcabg OPRLcabg;
-%let OPRCABG        = KFNA KFNC KFND KFNE;
-%let OPRLCABG       = "Coronary artery bypass graft";
+%IndicatorDef(OPR, CABG, "Coronary artery bypass graft", KFNA KFNC KFND KFNE);
 
 /* Caesar / Caesarian section  */
-%global OPRCaesar OPRLCaesar;
-%let OPRCaesar        = KMCA;
-%let OPRLCaesar       = "Caesarian section";
+%IndicatorDef(OPR, Caesar, "Caesarian section", KMCA);
 
 /* F */
 /* fn */
-%global OPRfn OPRLfn;
-%let OPRfn          = KFN;
-%let OPRLfn         = "Percutanious coronary intervention or coronary artery bypass craft";
+%IndicatorDef(OPR, fn, "Percutanious coronary intervention or coronary artery bypass craft", KFN);
 
 /* K */
 /* kidtra */
-%global OPRKidtra OPRLKidtra;
-%let OPRKidtra      = KKAS00 KKAS10 KKAS20;
-%let OPRLKidtra     = "Kidney transplantation";
+%IndicatorDef(OPR, Kidtra, "Kidney transplantation", KKAS00 KKAS10 KKAS20);
 
-/* kneehip - knæ og hofte operation */
-%global OPRkneehip OPRLkneehip;
-%let OPRkneehip     = KNGB KNGC KNGU KNFB KNFC KNFU;
-%let OPRLkneehip    = "knæ og hofte operation"; 
+/* kneehip - knÃ¦ og hofte operation */
+%IndicatorDef(OPR, kneehip, "knÃ¦ og hofte operation", KNGB KNGC KNGU KNFB KNFC KNFU);
 
 /* L */
-/* Lbleedopr - Bleeding in respiratory/thorax (OPR) (LINE)*/;
-%global OPRLbleedopr OPRLLbleedopr;
-%let OPRLbleedopr      = KGWD KGWD02 KGWE;
-%let OPRLLbleedopr     = "Bleeding in respiratory/thorax (OPR)";
+/* Lbleedopr - Bleeding in respiratory/thorax (OPR) (LINE)*/
+%IndicatorDef(OPR, Lbleedopr, "Bleeding in respiratory/thorax (OPR)", KGWD KGWD02 KGWE);
 
 /* M  */
 /* msurg */
-%global OPRMSurg OPRLMSurg;
-%let OPRMSurg       = KA KB KD KF KG KH KJ KK KL KM KN KP;
-%let OPRLMSurg      = "Major surgery";
+%IndicatorDef(OPR, MSurg, "Major surgery", KA KB KD KF KG KH KJ KK KL KM KN KP);
 
 /* P */
 /* pci */
-%global OPRpci OPRLpci;
-%let OPRpci         = KFNG;
-%let OPRLpci        = "Percutanious coronary intervention";
+%IndicatorDef(OPR, pci, "Percutanious coronary intervention", KFNG);
 
 /* pmicd */
-%global OPRPMICd OPRLLpmicd;
-%let OPRPMICD       = KFPG KFPE;
-%let OPRLPMICD      = "Pacemaker / ICD operation Kode ophører i brug pr 2001";
+%IndicatorDef(OPR, PMICD, "Pacemaker / ICD operation Kode ophÃ¸rer i brug pr 2001", KFPG KFPE);
 
-/* Probleedopr - Procedure-related bleeding (OPR) (LINE)*/;
-%global OPRProbleedopr OPRLProbleedopr;
-%let OPRProbleedopr      = KAAB30 KAAD00 KAAD05 KAAD10 KAAD15 KABB40 KAWD KAWD00A KAWE KBWD KBWE KCKD90 KCWD KCWE KDWD KDWE KEWD KEWE KFWD KFWE KGWD KGWD02 KGWE KHWD KHWE KJWD KJWE KKEV KKEV02 KKWD KKWE KLWD KLWE KMBC40 KMWD KMWE KNAW79 KNAW89 KNBW79 KNBW89 KNCW79 KNCW89 KNDW79 KNDW89 KNEW79 KNEW89 KNFW79 KNFW89 KNGW79 KNGW89 KNHW79 KNHW89 KPWD KPWE KQWD KQWE;
-%let OPRLProbleedopr     = "Procedure-related bleeding (OPR)";
+/* Probleedopr - Procedure-related bleeding (OPR) (LINE)*/
+%IndicatorDef(OPR, Probleedopr, "Procedure-related bleeding (OPR)", KAAB30 KAAD00 KAAD05 KAAD10 KAAD15 KABB40 KAWD KAWD00A KAWE KBWD KBWE KCKD90 KCWD KCWE KDWD KDWE KEWD KEWE KFWD KFWE KGWD KGWD02 KGWE KHWD KHWE KJWD KJWE KKEV KKEV02 KKWD);
 
 /* V */
 /* valveo */
-%global OPRvalveo OPRLvalveo;
-%let OPRValveo      = KFG KFK KFM;
-%let OPRLValveo     = "Heart valve operation";
+%IndicatorDef(OPR, Valveo, "Heart valve operation", KFG KFK KFM);
 
-  
-/*mechvalve - mechanical valve prothesis*/
-%let oprmechvalve = kfge00 kfkd00 kfjf00 kfmd00;
-%let oprlmechvalve = "mechanical valve prothesis";
+/* mechvalve - mechanical valve prothesis */
+%IndicatorDef(OPR, mechvalve, "mechanical valve prothesis", kfge00 kfkd00 kfjf00 kfmd00);
