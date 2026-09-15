@@ -24,7 +24,7 @@
 %IndicatorDef(DIAG, charlson3, "Peripheral vascular disease", I70 I71 I72 I73 I74 I77, icd8=440 441 442 443 444 445, w=1);
 %IndicatorDef(DIAG, charlson4, "Cerebrovasvular disease", I60 I61 I62 I63 I64 I65 I66 I67 I68 I69 G45 G46, icd8=430 431 432 433 434 435 436 437 438, w=1);
 %IndicatorDef(DIAG, charlson5, "Dementia", F00 F01 F02 F03 F051 G30, icd8=29009 29010 29011 29012 29013 29014 29015 29016 29017 29018 29019 29309, w=1);
-%IndicatorDef(DIAG, charlson6, "Chronic Pulmonary disease", J40 J41 J42 J43 J44 J45 J46 J47 J60 J61 J62 J63 J64 J65 J66 J67 J684 J701 J703 J841 J920 J961 J982 J983, icd8=490 491 492 493 515 516 517 518, w=1);
+%IndicatorDef(DIAG, charlson6, "Chronic Pulmonary disease", J40 J41 J42 J43 J44 J45 J46 J47 J60 J61 J62 J63 J64 J65 J66 J67 J684 J701 J703 J841 J920 J961 J982 J983, icd8=490 491 492 493 515 516 517 51[...]
 %IndicatorDef(DIAG, charlson7, "Connective tissue disease", M05 M06 M08 M09 M30 M31 M32 M33 M34 M35 M36 D86, icd8=712 716 734 446 13599, w=1);
 %IndicatorDef(DIAG, charlson8, "Ulcer disease", K221 K25 K26 K27 K28, icd8=53091 53098 531 532 533 534, w=1);
 %IndicatorDef(DIAG, charlson9, "Mild liver disease", B18 K700 K701 K702 K703 K709 K71 K73 K74 K760, icd8=571 57301 57304, w=1);
@@ -33,7 +33,7 @@
 /* Charlson weight 2 */
 %IndicatorDef(DIAG, charlson11, "Hemiplegia", G81 G82, icd8=344, w=2);
 %IndicatorDef(DIAG, charlson12, "Moderate/severe renal disease", I12 I13 N00 N01 N02 N03 N04 N05 N07 N11 N14 N17 N18 N19 Q61, icd8=403 404 580 581 582 583 584 59009 59319 7531 792, w=2);
-%IndicatorDef(DIAG, charlson13, "Diabetes Mellitus with chronic complications", E102 E103 E104 E105 E106 E107 E108 E112 E113 E114 E115 E116 E117 E118, icd8=24901 24902 24903 24904 24905 24908 25001 25002 25003 25004 25005 25008, w=2);
+%IndicatorDef(DIAG, charlson13, "Diabetes Mellitus with chronic complications", E102 E103 E104 E105 E106 E107 E108 E112 E113 E114 E115 E116 E117 E118, icd8=24901 24902 24903 24904 24905 24908 25001 25[...]
 %IndicatorDef(DIAG, charlson14, "Any tumor", C0 C1 C2 C3 C4 C5 C6 C70 C71 C72 C73 C74 C75, icd8=14 15 16 17 18 190 191 192 193 194, w=2);
 %IndicatorDef(DIAG, charlson15, "Leukemia", C91 C92 C93 C94 C95, icd8=204 205 206 207, w=2);
 %IndicatorDef(DIAG, charlson16, "Lymphoma", C81 C82 C83 C84 C85 C88 C90 C96, icd8=200 201 202 203 27559, w=2);
@@ -187,13 +187,13 @@
 
 
 /* HAS-BLED bleeding risk score */
-%IndicatorDef(LPR, hasbled1, "Renal disease", &LPRCrenal, icd8=&LPRCrenal_ICD8, w=1);
-%IndicatorDef(LPR, hasbled2, "Liver disease", &LPRLiver, icd8=&LPRLiver_ICD8, w=1);
-%IndicatorDef(LPR, hasbled3, "Stroke (IStroke or TIA)", &LPRIStroke &LPRTIA,
+%IndicatorDef(DIAG, hasbled1, "Renal disease", &LPRCrenal, icd8=&LPRCrenal_ICD8, w=1);
+%IndicatorDef(DIAG, hasbled2, "Liver disease", &LPRLiver, icd8=&LPRLiver_ICD8, w=1);
+%IndicatorDef(DIAG, hasbled3, "Stroke (IStroke or TIA)", &LPRIStroke &LPRTIA,
               icd8= &LPRIStroke_ICD8 &LPRTIA_ICD8, w=1);
-%IndicatorDef(LPR, hasbled4, "Bleeding", &LPRGIbleed &LPRICbleed &LPRIMbleed &LPRgenbleed &LPRocbleed,
+%IndicatorDef(DIAG, hasbled4, "Bleeding", &LPRGIbleed &LPRICbleed &LPRIMbleed &LPRgenbleed &LPRocbleed,
               icd8=&LPRGIbleed_ICD8 &LPRICbleed_ICD8 &LPRIMbleed_ICD8 &LPRgenbleed_ICD8 &LPRocbleed_ICD8, w=1);
-%IndicatorDef(LPR, hasbled5, "Alcohol", &LPRAlco, icd8=&LPRAlco_ICD8, w=1, wdays=180);
+%IndicatorDef(DIAG, hasbled5, "Alcohol", &LPRAlco, icd8=&LPRAlco_ICD8, w=1, wdays=180);
 
 %IndicatorDef(CPR, hasbled1, "Age>=65", empty, w=1,
               crit=((%MCSDate-birthdate)/365)>=65); /*IGNORE THE WARNING. Placeholder used in multicoscores.sas*/
@@ -207,9 +207,9 @@
 
 /* CHA2DS2-VASc stroke risk score */
 
-%IndicatorDef(LPR, cha2ds2vasc1, "Stroke (IStroke or SE or TIA)", &LPRIStroke &LPRTIA &LPRSE,
+%IndicatorDef(DIAG, cha2ds2vasc1, "Stroke (IStroke or SE or TIA)", &LPRIStroke &LPRTIA &LPRSE,
               icd8= &LPRIStroke_ICD8 &LPRTIA_ICD8 &LPRSE_ICD8, w=2);
-%IndicatorDef(LPR, cha2ds2vasc2, "Vascular disease (MI or PAD3)", &LPRMI &LPRPAD3,
+%IndicatorDef(DIAG, cha2ds2vasc2, "Vascular disease (MI or PAD3)", &LPRMI &LPRPAD3,
               icd8= &LPRMI_ICD8 &LPRPAD3_ICD8, w=1);
 %IndicatorDef(CPR, cha2ds2vasc1, "Age>=65", empty, w=1,
               crit=((%MCSDate-birthdate)/365)>=65); /*IGNORE THE WARNING. Placeholder used in multicoscores.sas*/
@@ -231,12 +231,12 @@
 /* Heart failure, used in CHA2DS2-VASc */
 %IndicatorDef(ATC, HeartFailMedi1, &ATCcloop, &ATCloop, w=1);
 %IndicatorDef(ATC, HeartFailMedi2, &ATCLRenin, &ATCRenin, w=1);
-%IndicatorDef(LPR, HeartFailDiag1, &LPRHFStr, &LPRHFStr, icd8=&LPRHFStr_ICD8, w=1);
+%IndicatorDef(DIAG, HeartFailDiag1, &LPRHFStr, &LPRHFStr, icd8=&LPRHFStr_ICD8, w=1);
 
 
 /* Diabetes, used in CHA2DS2-VASc */
 %IndicatorDef(ATC, DiabetesMedi1, &ATCDiabetesATC, &ATCDiabetesATC, w=1);
-%IndicatorDef(LPR, DiabetesDiag1, &LPRDiabLPR, &LPRDiabLPR, icd8=&LPRDiabLPR_ICD8, w=1);
+%IndicatorDef(DIAG, DiabetesDiag1, &LPRDiabLPR, &LPRDiabLPR, icd8=&LPRDiabLPR_ICD8, w=1);
 
 
 /* Hypertension, used in CHA2DS2VASC and HAS-BLED */
@@ -246,7 +246,7 @@
 %IndicatorDef(ATC, HypertensionMedi4, &ATCLBeta, &ATCBeta, w=1);
 %IndicatorDef(ATC, HypertensionMedi5, &ATCLCalcium, &ATCCalcium, w=1);
 %IndicatorDef(ATC, HypertensionMedi6, &ATCLRenin, &ATCRenin, w=1);
-%IndicatorDef(LPR, HypertensionDiag1, &LPRHylLPR, &LPRHylLPR, icd8=&LPRHylLPR_ICD8, w=1);
+%IndicatorDef(DIAG, HypertensionDiag1, &LPRHylLPR, &LPRHylLPR, icd8=&LPRHylLPR_ICD8, w=1);
 
 
 /* Hypertension combination drugs, used in CHA2DS2VASC and HAS-BLED */
