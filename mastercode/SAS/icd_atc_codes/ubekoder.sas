@@ -7,109 +7,62 @@ $Id: UBEkoder.sas 115 2018-07-13 09:31:45Z FCNI6683 $
 /* procedure codes, use UBE and UBEL prefix', use full code */
 /* getOPR is used to extract data, with option type=UBE */
 
-/* old version 
-%global UBEabla UBELabla;
-%let UBEAbla        = BFFB0 BFFB1 BFFB3 BFFB4 BFFB5;
-%let UBELAbla       = "Ablation";
-*/
 /* abla - Ablation */
-%global UBEabla UBELabla;
-%let UBEAbla        = BFFB;
-%let UBELAbla       = "Ablation";
+%IndicatorDef(type=UBE, name=abla, short_txt="Ablation", code=BFFB);
 
 /* afliab - Atrial fibrillation ablation  */
-%global UBEafliab UBELafliab;
-%let UBEafliab        = BFFB04;
-%let UBELafliab       = "Atrial Fibrillation Ablation";
+%IndicatorDef(type=UBE, name=afliab, short_txt="Atrial Fibrillation Ablation", code=BFFB04);
 
 /* afluab - Atrial flutter ablation  */
-%global UBEafluab UBELafluab;
-%let UBEafluab        = BFFB03;
-%let UBELafluab       = "Atrial Flutter Ablation";
+%IndicatorDef(type=UBE, name=afluab, short_txt="Atrial Flutter Ablation", code=BFFB03);
 
 /* Angio - Angiography  */
-%global UBEAngio UBELAngio;
-%let UBEAngio        = UXAG UXAC10;
-%let UBELAngio       = "Angiography";
+%IndicatorDef(type=UBE, name=Angio, short_txt="Angiography", code=UXAG UXAC10);
 
-/* cag - coronary angiography - kranspulsåreundersøgelse */
-%global UBECAG UBELCAG;
-%let UBECAG         = UXAC85;
-%let UBELCAG        = "Coronary angiography";
+/* cag - coronary angiography - kranspulsÃ¥reundersÃ¸gelse */
+%IndicatorDef(type=UBE, name=CAG, short_txt="Coronary angiography", code=UXAC85);
 
 /* CT - CT-scan   */
-%global UBEct UBELct;
-%let UBEct        = UXC;
-%let UBELct       = "CT-scan";
+%IndicatorDef(type=UBE, name=ct, short_txt="CT-scan", code=UXC);
 
 /* CT1 - CT-scan   */
-%global UBEct1 UBELct1;
-%let UBEct1       = UXCG UXCC;
-%let UBELct1      = "CT-scan";
+%IndicatorDef(type=UBE, name=ct1, short_txt="CT-scan", code=UXCG UXCC);
 
 /* CVK - Central venous catheter */
-%global UBECVK UBELCVK;
-%let UBECVK        = BMBZ61 BMBZ71 BMBZ51 BMLA01 BMBLA02 BMBLA03;
-%let UBELCVK       = "Central venous catheter";
+%IndicatorDef(type=UBE, name=CVK, short_txt="Central venous catheter", code=BMBZ61 BMBZ71 BMBZ51 BMLA01 BMBLA02 BMBLA03);
 
 /* dc - dc konvertering */
-%global UBEDC UBELDC;
-%let UBEDC          = BFFA01;
-%let UBELDC         = "DC-konvertering";
+%IndicatorDef(type=UBE, name=dc, short_txt="DC-konvertering", code=BFFA01);
 
 /* dialys - Acute and chronic dialysis, haemo & peritoneal */
-%global UBEdialys UBELdialys;
-%let UBEdialys      = BJFD;
-%let UBELdialys     = "Acute and chronic dialysis, haemo & peritoneal";
+%IndicatorDef(type=UBE, name=dialys, short_txt="Acute and chronic dialysis, haemo & peritoneal", code=BJFD);
 
 /* dialys2 - Dialysis in Chronic kidney disease, haemo & peritoneal */
-%global UBEdialys2 UBELdialys2;
-%let UBEdialys2      = BJFD2;
-%let UBELdialys2     = "Dialysis in Chronic kidney disease, haemo & peritoneal";
+%IndicatorDef(type=UBE, name=dialys2, short_txt="Dialysis in Chronic kidney disease, haemo & peritoneal", code=BJFD2);
 
 /* ec - Electrical cardioversion */
-%global UBEec UBELec;
-%let UBEEC          = BFFA00 BFFA01 BFFA04;
-%let UBELEC         = "Electrical cardioversion";
+%IndicatorDef(type=UBE, name=ec, short_txt="Electrical cardioversion", code=BFFA00 BFFA01 BFFA04);
 
 /* Ecco - Ultrasonograpy including echocardiography   */
-%global UBEEcco UBELEcco;
-%let UBEEcco        = UXUC80 UXUC81;
-%let UBELEcco       = "Ultrasonograpy including echocardiography";
+%IndicatorDef(type=UBE, name=Ecco, short_txt="Ultrasonograpy including echocardiography", code=UXUC80 UXUC81);
 
 /* HRTUBE - Hormone replacement therapy */
-%global UBEHRTUBE UBELHRTUBE;
-%let UBEHRTUBE        = BBHG0;
-%let UBEHRTUBE_ICD8   = "";
-%let UBELHRTUBE       = "Hormone replacement therapy";
+%IndicatorDef(type=UBE, name=HRTUBE, short_txt="Hormone replacement therapy", code=BBHG0);
 
-/* MRveno - MR venography - tillægskode! */
-%global UBEMRveno UBELMRveno;
-%let UBEMRveno        = UXZ52;
-%let UBELMRveno       = "MR venography";
+/* MRveno - MR venography - tillÃ¦gskode! */
+%IndicatorDef(type=UBE, name=MRveno, short_txt="MR venography", code=UXZ52);
 
 /* MyeloSKS - Myeloproliferative disorders (polycythemia vera, essential thrombocytemia)  */
-%global UBEMyeloSKS UBELMyeloSKS;
-%let UBEMyeloSKS        = ZM99503 ZM99623;
-%let UBELMyeloSKS       = "Myeloproliferative disorders (polycythemia vera, essential thrombocytemia)";
+%IndicatorDef(type=UBE, name=MyeloSKS, short_txt="Myeloproliferative disorders (polycythemia vera, essential thrombocytemia)", code=ZM99503 ZM99623);
 
 /* ObesUBE  - behandlings- og plejeklassifikation */
-%global UBEObesube UBELObesube;
-%let UBEObesube     = BQFT03 BQFS01;
-%let UBELObesube       = "Obesity";
+%IndicatorDef(type=UBE, name=Obesube, short_txt="Obesity", code=BQFT03 BQFS01);
 
 /* pm - Pacemaker */
-%global UBEPM UBELPM;
-%let UBEPM          = BFCA0 BFCA6 BFCA9;
-%let UBELPM         = "Pacemaker";
+%IndicatorDef(type=UBE, name=PM, short_txt="Pacemaker", code=BFCA0 BFCA6 BFCA9);
 
-/* old name: ullow */
-/* ullow - Ultrasonography UE  - Klassifikation af undersøgelser */
-%global UBEullow UBELullow;
-%let UBEullow        = UXUG;
-%let UBELullow       = "Ultrasonography UE";
+/* ullow - Ultrasonography UE  - Klassifikation af undersÃ¸gelser */
+%IndicatorDef(type=UBE, name=ullow, short_txt="Ultrasonography UE", code=UXUG);
 
-/* VentPerf - Ventilation-perfusion examination  - klassifikation af undersøgelser */
-%global UBEVentPerf UBELVentPerf;
-%let UBEVentPerf        = WLHGS;
-%let UBELVentPerf       = "Ventilation-perfusion examination";
+/* VentPerf - Ventilation-perfusion examination  - klassifikation af undersÃ¸gelser */
+%IndicatorDef(type=UBE, name=VentPerf, short_txt="Ventilation-perfusion examination", code=WLHGS);
