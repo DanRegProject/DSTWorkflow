@@ -17,6 +17,8 @@
 %IF %UPCASE(&test)=TRUE %THEN %LET out=WORK;
 %LET in=%UPCASE(&in);
 %LET out=%UPCASE(&out);
+%LET pnrvar=%UPCASE(&pnrvar);
+%LET keep=%UPCASE(&keep);
 
     proc sql noprint;
         select distinct memname into :ds_names separated by ' '
@@ -50,12 +52,14 @@
         %IF %sysfunc(exist(&in..&ds)) %THEN %DO;
 
             proc sql noprint;
-                select nvar into :num_vars
-                    from dictionary.tables
-                    where libname="&in" and upper(memname)="&ds";
+                select count(*) into :num_vars
+                    from dictionary.columns
+                    where libname="&in" and upper(memname)="&ds"
+					%if "&keep" ne "" %then and upper(name) in (%quotelst(&pnrvar &keep, quote=%str(%"), delim(%str(, )));;
                 select distinct(name) into :var1-:var%trim(%left(&num_vars))
                     from dictionary.columns
                     where libname="&in" and upper(memname)="&ds"
+					%if "&keep" ne "" %then and upper(name) in (%quotelst(&pnrvar &keep, quote=%str(%"), delim(%str(, )));
 		    order by name;
                 %sqlquit;
         %IF %varexist(&in..&ds,&pnrvar) %THEN %DO;
@@ -82,7 +86,12 @@
         put "set &in..&ds(";
                     %IF %UPCASE(&test)=TRUE %THEN put " obs=10000";;
                     %IF &pnrvar ne pnr AND &pnrvar ne %THEN put "rename=(&pnrvar=pnr)";;
-                    %IF &keep ne %THEN put "keep=&pnrvar &keep";;
+                    %IF &keep ne %THEN %DO; 
+						put "keep= "
+						%DO v=1 %TO &num_vars;
+							" &&var&v"
+						%END;;
+					%END;
         put ")";
         put ";";
         %IF &pnrvar ne %THEN %DO;
