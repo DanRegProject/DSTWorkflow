@@ -107,3 +107,97 @@ to_num_or_na <- function(x) {
   }
   as.numeric(x)
 }
+
+
+#' Safe column selection
+#' @param dt data.table
+#' @param cols Vector of column names to select
+#' @return data.table with only existing columns
+select_existing_cols <- function(dt, cols) {
+  
+  existing <- cols[cols %in% names(dt)]
+  missing <- cols[!cols %in% names(dt)]
+  
+  if (length(missing) > 0) {
+    log_message(paste("Columns not found:", paste(missing, collapse = ", ")), "WARNING")
+  }
+  
+  if (length(existing) == 0) {
+    log_message("No columns to select", "WARNING")
+    return(dt[, .SD][0])  # Return empty data.table with same structure
+  }
+  
+  return(dt[, ..existing])
+}
+
+# ============================================================================
+# DATA VALIDATION UTILITIES
+# ============================================================================
+
+#' Validate required columns in dataset
+#' @param dt data.table
+#' @param required_cols Vector of required column names
+#' @return Logical TRUE if valid, FALSE otherwise
+validate_columns <- function(dt, required_cols) {
+  
+  missing <- required_cols[!required_cols %in% names(dt)]
+  
+  if (length(missing) > 0) {
+    log_message(paste("Missing required columns:", paste(missing, collapse = ", ")), "ERROR")
+    return(FALSE)
+  }
+  
+  return(TRUE)
+}
+
+#' Check for duplicate rows
+#' @param dt data.table
+#' @param by_cols Columns to check duplicates by
+#' @return Number of duplicates
+count_duplicates <- function(dt, by_cols) {
+  
+  if (!all(by_cols %in% names(dt))) {
+    log_message("Some 'by' columns not found", "WARNING")
+    return(NA)
+  }
+  
+  dup_count <- sum(duplicated(dt, by = by_cols))
+  
+  if (dup_count > 0) {
+    log_message(paste("Found", dup_count, "duplicates by columns:", 
+                      paste(by_cols, collapse = ", ")), "WARNING")
+  }
+  
+  return(dup_count)
+}
+
+# ============================================================================
+# STRING UTILITIES
+# ============================================================================
+
+#' String concatenation operator
+`%+%` <- function(x, y) {
+  paste0(x, y)
+}
+
+#' Check if string is empty or NULL
+is_empty <- function(x) {
+  is.null(x) || length(x) == 0 || (is.character(x) && x == "")
+}
+
+#' Expand code patterns (e.g., "DA" matches "DA666", "DA667")
+#' @param code_pattern Pattern to match (e.g., "DA")
+#' @param code_list Full list of codes
+#' @return Codes matching pattern
+match_code_pattern <- function(code_pattern, code_list) {
+  
+  if (is_empty(code_pattern)) return(character(0))
+  
+  # Use grepl for prefix matching
+  matched <- code_list[grepl(paste0("^" %+% code_pattern), code_list, ignore.case = TRUE)]
+  
+  return(matched)
+}
+
+cat("\n=== Utility functions loaded ===")
+cat("\n")
