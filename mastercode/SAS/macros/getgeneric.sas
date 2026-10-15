@@ -173,7 +173,7 @@ proc sql noprint;
 
 %let I=1;
 %do %while (%SCAN(&ds_names,&I) ne );
-   %let RC=0;
+   %let SQLRC=0;
    %if &dsn2 ne %then %let locdsn2= %SYSFUNC(tranwrd(%SCAN(&ds_names,&i),&dsn1,&dsn2));
    %if &dsn3 ne %then %let locdsn3= %SYSFUNC(tranwrd(%SCAN(&ds_names,&i),&dsn1,&dsn3));
    %let locdsn1= %SCAN(&ds_names,&i);
@@ -313,6 +313,7 @@ data &outdata;
       %end;
    &type.outcome="&outcome";
 run;
+%let &returncode=0
 %end;
 
 %let I=%eval(&I+1);
